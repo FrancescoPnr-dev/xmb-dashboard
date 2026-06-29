@@ -1,0 +1,22 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Category": "Application Launchers",
+        "Description": "An XrossMediaBar (PS3/PSP XMB) style fullscreen application dashboard.",
+        "Description[it]": "Un cruscotto applicazioni a schermo intero in stile XrossMediaBar (XMB di PS3/PSP).",
+        "FormFactors": [
+            "desktop"
+        ],
+        "Icon": "applications-all",
+        "Id": "org.kde.plasma.xmbdashboard",
+        "License": "GPL-3.0-or-later",
+        "Name": "XMB Dashboard",
+        "Name[it]": "Cruscotto XMB",
+        "Version": "0.1.0",
+        "Website": "https://kde.org"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.launchermenu"
+    ]
+}

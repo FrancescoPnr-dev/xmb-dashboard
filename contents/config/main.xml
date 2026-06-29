@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    KConfigXT schema. Every <entry> here becomes available in QML as
+    Plasmoid.configuration.<name> (read/write, auto-persisted).
+-->
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+                          http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+
+    <group name="General">
+        <!-- Darkness of the fullscreen overlay (0 = transparent, 1 = opaque black). -->
+        <entry name="backgroundOpacity" type="Double">
+            <default>0.85</default>
+        </entry>
+
+        <!-- Icon size (px) of the selected category on the horizontal bar. -->
+        <entry name="categoryIconSize" type="Int">
+            <default>112</default>
+        </entry>
+
+        <!-- Icon size (px) of the selected app in the vertical column. -->
+        <entry name="appIconSize" type="Int">
+            <default>56</default>
+        </entry>
+
+        <!-- Horizontal position of the fixed cross intersection, as a
+             fraction of the screen width (0.30 = classic PS3 center-left). -->
+        <entry name="intersectionXFraction" type="Double">
+            <default>0.30</default>
+        </entry>
+
+        <!-- Icon shown on the panel for this widget. -->
+        <entry name="panelIcon" type="String">
+            <default>applications-all</default>
+        </entry>
+
+        <!-- Display names of categories the user chose to hide from the bar. -->
+        <entry name="hiddenCategories" type="StringList">
+            <default></default>
+        </entry>
+
+        <!-- ===== Category-bar mouse "hot zone" feel ===== -->
+
+        <!-- Width of the LEFT edge hot zone, as a fraction of screen width. -->
+        <entry name="hotZoneFractionLeft" type="Double">
+            <default>0.35</default>
+        </entry>
+
+        <!-- Width of the RIGHT edge hot zone, as a fraction of screen width. -->
+        <entry name="hotZoneFractionRight" type="Double">
+            <default>0.35</default>
+        </entry>
+
+        <!-- Scroll speed (px/sec) just inside the hot-zone threshold (fine control). -->
+        <entry name="minScrollSpeed" type="Int">
+            <default>1500</default>
+        </entry>
+
+        <!-- Scroll speed (px/sec) at the extreme screen edge (fastest). -->
+        <entry name="maxScrollSpeed" type="Int">
+            <default>2600</default>
+        </entry>
+
+        <!-- Duration (ms) of the snap-to-nearest animation when leaving the hot zone. -->
+        <entry name="snapDuration" type="Int">
+            <default>220</default>
+        </entry>
+
+        <!-- Magnetic "glue" strength near category centres (0 = none .. ~1 = strong). -->
+        <entry name="magneticStrength" type="Double">
+            <default>0.7</default>
+        </entry>
+
+        <!-- Height (px) of the vertical band, centred on the category row, within
+             which the left/right hot zones are active. Outside it (where the app
+             column lives) approaching the edges does not scroll categories. -->
+        <entry name="hotZoneBandHeight" type="Int">
+            <default>360</default>
+        </entry>
+    </group>
+</kcfg>
