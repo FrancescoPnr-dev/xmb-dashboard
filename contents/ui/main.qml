@@ -38,6 +38,8 @@ PlasmoidItem {
     // The fullscreen overlay, wired to the live configuration values.
     Dashboard {
         id: dashboard
+        appletInterface: root
+        favorites: Plasmoid.configuration.favorites
         backgroundOpacity: Plasmoid.configuration.backgroundOpacity
         categoryIconSize: Plasmoid.configuration.categoryIconSize
         appIconSize: Plasmoid.configuration.appIconSize

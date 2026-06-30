@@ -41,6 +41,13 @@
             <default></default>
         </entry>
 
+        <!-- Ordered list of favourite application IDs, backing the "Favourites" category.
+             Read/written by the kicker favourites model (KAStatsFavoritesModel), shared
+             with kactivitymanagerd — same mechanism Kickoff uses. -->
+        <entry name="favorites" type="StringList">
+            <default></default>
+        </entry>
+
         <!-- ===== Category-bar mouse "hot zone" feel ===== -->
 
         <!-- Width of the LEFT edge hot zone, as a fraction of screen width. -->

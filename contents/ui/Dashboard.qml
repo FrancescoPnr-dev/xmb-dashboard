@@ -14,6 +14,7 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Effects
 import org.kde.plasma.private.kicker as Kicker
+import org.kde.kitemmodels as KItemModels
 
 Window {
     id: dashboard
@@ -62,6 +63,13 @@ Window {
     // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
     // of a glide, so the app list does not reload while the bar is scrolling.
     property int committedIndex: 0
+
+    // The PlasmoidItem, passed from main.qml, so the kicker models can access the applet
+    // (app enumeration). Favourites are NOT the system favourites — they're our own list
+    // of app IDs, chosen in the settings and stored in the `favorites` config key.
+    property var appletInterface: null
+    property var favorites: []
+    onFavoritesChanged: rebuildFavorites()
 
     // Rebuilt whenever the model or the hidden list changes.
     property var categories: []
@@ -142,6 +150,9 @@ Window {
     Kicker.RootModel {
         id: rootModel
         autoPopulate: true
+        // Lets the favorites model read/persist the user's favourites (same mechanism
+        // as Kickoff: kactivitymanagerd + the applet config). Passed in from main.qml.
+        appletInterface: dashboard.appletInterface
         showAllApps: false
         showAllAppsCategorized: true
         showRecentApps: false
@@ -152,6 +163,65 @@ Window {
         showSeparators: false
         appNameFormat: 0            // 0 = application name only
         onCountChanged: Qt.callLater(dashboard.rebuildCategories)
+    }
+
+    // ---- Favourites (our own list, NOT the system favourites) ----
+    // Flat list of ALL installed apps: source for resolving + launching the favourites.
+    Kicker.RootModel {
+        id: allAppsRoot
+        autoPopulate: true
+        appletInterface: dashboard.appletInterface
+        showAllApps: true
+        showAllAppsCategorized: false
+        showRecentApps: false
+        showRecentDocs: false
+        showRecentFolders: false
+        showPowerSession: false
+        showFavoritesPlaceholder: false
+        showSeparators: false
+        appNameFormat: 0
+        onCountChanged: {
+            dashboard.allAppsFlat = allAppsRoot.modelForRow(0)
+            Qt.callLater(dashboard.rebuildFavorites)
+        }
+    }
+    property var allAppsFlat: null
+
+    // favoriteId -> source row over the flat list, so we can map our config IDs to apps.
+    Instantiator {
+        id: appIndex
+        model: dashboard.allAppsFlat
+        delegate: QtObject {
+            required property string favoriteId
+            required property int index
+        }
+        onObjectAdded: Qt.callLater(dashboard.rebuildFavorites)
+        onObjectRemoved: Qt.callLater(dashboard.rebuildFavorites)
+    }
+
+    // Favourites = the flat app list filtered to the rows whose favoriteId is in `favorites`.
+    KItemModels.KSortFilterProxyModel {
+        id: favProxy
+        sourceModel: dashboard.allAppsFlat
+        filterRowCallback: function(sourceRow, sourceParent) { return false }
+    }
+
+    function rebuildFavorites() {
+        var byId = {}
+        for (var i = 0; i < appIndex.count; i++) {
+            var o = appIndex.objectAt(i)
+            if (o && o.favoriteId)
+                byId[o.favoriteId] = o.index
+        }
+        var rows = {}
+        var favs = dashboard.favorites || []
+        for (var j = 0; j < favs.length; j++) {
+            var r = byId[favs[j]]
+            if (r !== undefined)
+                rows[r] = true
+        }
+        // Reassigning the callback re-runs the filter.
+        favProxy.filterRowCallback = function(sourceRow, sourceParent) { return rows[sourceRow] === true }
     }
 
     // Non-visual mirror of the categories so we can read name + icon per source
@@ -185,6 +255,11 @@ Window {
                 continue
             arr.push({ name: o.name, icon: o.icon, key: o.key, sourceRow: i })
         }
+        // "Favourites" is always the first category on the left (system favourites,
+        // org.kde.plasma favourites model). Hideable like the rest via its stable key.
+        if (hiddenCategories.indexOf("__favorites__") === -1)
+            arr.unshift({ name: i18n("Favorites"), icon: "bookmarks",
+                          key: "__favorites__", sourceRow: -1, favorites: true })
         categories = arr
         // currentIndex is derived (read-only); CategoryBar self-clamps its position
         // on count change. We only clamp the committed index here.
@@ -198,7 +273,10 @@ Window {
         (committedIndex >= 0 && committedIndex < categories.length)
             ? categories[committedIndex] : null
     readonly property var appsModel:
-        currentCategory ? rootModel.modelForRow(currentCategory.sourceRow) : null
+        currentCategory
+            ? (currentCategory.favorites ? favProxy
+                                         : rootModel.modelForRow(currentCategory.sourceRow))
+            : null
 
     // ---------------------------------------------------------------------
     // Visuals
@@ -332,6 +410,14 @@ Window {
             // Don't let the wheel scroll the app list while the top bar (quick settings)
             // is under the pointer — the wheel adjusts those instead.
             wheelLocked: topBar.contentHovered
+            // Favourites use a filtered proxy with no trigger() — launch via the source.
+            launchHandler: (dashboard.currentCategory && dashboard.currentCategory.favorites)
+                ? function(idx) {
+                      var src = favProxy.mapToSource(favProxy.index(idx, 0))
+                      if (src.valid && dashboard.allAppsFlat)
+                          dashboard.allAppsFlat.trigger(src.row, "", null)
+                  }
+                : null
             onAppLaunched: dashboard.close()
         }
 
