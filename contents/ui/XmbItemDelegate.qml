@@ -10,6 +10,7 @@
  * and how far we are from the selection (`neighbourDistance`); it never animates.
  */
 import QtQuick
+import QtQuick.Effects
 import org.kde.kirigami as Kirigami
 
 Item {
@@ -40,6 +41,18 @@ Item {
 
     Behavior on emphasis { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
     Behavior on opacity  { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+
+    // PS3-style slow "breathing" glow on the focused item's label (enabled by the app
+    // column). glowPulse drives the white halo's strength; it animates only while the
+    // item is selected, so the category bar (glowWhenSelected = false) pays nothing.
+    property bool glowWhenSelected: false
+    property real glowPulse: 0.0
+    SequentialAnimation on glowPulse {
+        running: delegate.glowWhenSelected && delegate.selected
+        loops: Animation.Infinite
+        NumberAnimation { from: 0.30; to: 0.90; duration: 1500; easing.type: Easing.InOutSine }
+        NumberAnimation { from: 0.90; to: 0.30; duration: 1500; easing.type: Easing.InOutSine }
+    }
 
     // The app delegate spans the WHOLE column width (icon on the left, label far to
     // the right), so scaling around the delegate centre (the default) would swing the
@@ -111,6 +124,21 @@ Item {
             color: "white"
             elide: Text.ElideRight
             width: Math.min(implicitWidth, 420)
+
+            // Soft white halo whose strength breathes slowly, like the PS3's focused
+            // item. The text stays crisp: MultiEffect draws the blurred glow behind the
+            // sharp source. Only active on the selected app (glowWhenSelected).
+            layer.enabled: delegate.glowWhenSelected && delegate.selected
+            layer.effect: MultiEffect {
+                autoPaddingEnabled: true
+                blurMax: 32
+                shadowEnabled: true
+                shadowColor: "white"
+                shadowBlur: 1.0
+                shadowVerticalOffset: 0
+                shadowHorizontalOffset: 0
+                shadowOpacity: delegate.glowPulse
+            }
         }
     }
 

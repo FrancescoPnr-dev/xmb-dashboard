@@ -117,6 +117,8 @@ Item {
             extraTranslateY: index < list.currentIndex ? -column.aboveGap : 0
             // Focused app icon grows close to the category icon's size.
             selectedScale: column.selectedAppScale
+            // Slow PS3 "breathing" glow on the focused app's name.
+            glowWhenSelected: true
 
             onClicked: column.launchCurrent()   // only the centred app can fire this
         }
