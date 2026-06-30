@@ -75,6 +75,11 @@ PlasmoidItem {
         waveParticleCount: Plasmoid.configuration.waveParticleCount
         waveParticleOpacity: Plasmoid.configuration.waveParticleOpacity
         waveParticleFlowSpeed: Plasmoid.configuration.waveParticleFlowSpeed
+
+        // Navigation sound
+        navSoundMode: Plasmoid.configuration.navSoundMode
+        navSoundFile: Plasmoid.configuration.navSoundFile
+        navSoundVolume: Plasmoid.configuration.navSoundVolume
     }
 
     // Global shortcut / standard activation path (keyboard, "activate" action).

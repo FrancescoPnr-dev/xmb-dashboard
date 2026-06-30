@@ -53,6 +53,11 @@ KCM.SimpleKCM {
     property alias cfg_waveParticleOpacity: waveParticleOpacitySlider.value
     property alias cfg_waveParticleFlowSpeed: waveParticleFlowSpeedSlider.value
 
+    // Navigation sound
+    property alias cfg_navSoundMode: navSoundCombo.currentIndex
+    property alias cfg_navSoundFile: navSoundFileField.text
+    property alias cfg_navSoundVolume: navSoundVolumeSlider.value
+
     // StringList of hidden category names. Every cfg_<key> MUST be an alias so the
     // config system can auto-generate the matching cfg_<key>Default; a plain
     // `property var cfg_hiddenCategories` breaks that for ALL keys. So back it with
@@ -119,6 +124,10 @@ KCM.SimpleKCM {
     property real cfg_waveParticleOpacityDefault: 1.0
     property real cfg_waveParticleFlowSpeedDefault: 0.8
 
+    property int    cfg_navSoundModeDefault: 0
+    property string cfg_navSoundFileDefault: ""
+    property real   cfg_navSoundVolumeDefault: 0.6
+
     function resetAppearance() {
         cfg_backgroundOpacity = cfg_backgroundOpacityDefault
         cfg_categoryIconSize = cfg_categoryIconSizeDefault
@@ -160,6 +169,11 @@ KCM.SimpleKCM {
         cfg_waveParticleCount = cfg_waveParticleCountDefault
         cfg_waveParticleOpacity = cfg_waveParticleOpacityDefault
         cfg_waveParticleFlowSpeed = cfg_waveParticleFlowSpeedDefault
+    }
+    function resetSounds() {
+        cfg_navSoundMode = cfg_navSoundModeDefault
+        cfg_navSoundFile = cfg_navSoundFileDefault
+        cfg_navSoundVolume = cfg_navSoundVolumeDefault
     }
 
     Kirigami.FormLayout {
@@ -477,6 +491,47 @@ KCM.SimpleKCM {
             text: i18n("Reset section to defaults")
             icon.name: "edit-undo"
             onClicked: page.resetParticles()
+        }
+
+        // ================== Sounds ==================
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Sounds")
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.ComboBox {
+            id: navSoundCombo
+            Kirigami.FormData.label: i18n("Navigation tick:")
+            // Indices map to navSoundMode (0/1/2).
+            model: [ i18n("XMB (default)"), i18n("Custom file…"), i18n("Off") ]
+        }
+
+        QQC2.TextField {
+            id: navSoundFileField
+            Kirigami.FormData.label: i18n("Custom sound file:")
+            Layout.fillWidth: true
+            enabled: navSoundCombo.currentIndex === 1
+            placeholderText: i18n("/path/to/sound.wav or .mp3")
+        }
+        QQC2.Label {
+            Layout.fillWidth: true
+            visible: navSoundCombo.currentIndex === 1
+            wrapMode: Text.WordWrap
+            opacity: 0.7
+            text: i18n("The original PS3 sound is not bundled (Sony copyright). Point this at your own local copy. WAV gives the lowest latency.")
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: i18n("Volume:")
+            enabled: navSoundCombo.currentIndex !== 2
+            QQC2.Slider { id: navSoundVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: Math.round(navSoundVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetSounds()
         }
 
         // ================== Visible categories ==================
