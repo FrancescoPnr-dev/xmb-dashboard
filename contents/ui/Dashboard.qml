@@ -12,6 +12,7 @@
  */
 import QtQuick
 import QtQuick.Window
+import QtQuick.Effects
 import org.kde.plasma.private.kicker as Kicker
 
 Window {
@@ -32,6 +33,7 @@ Window {
     property int  snapDuration: 220
     property real magneticStrength: 0.7
     property int  hotZoneBandHeight: 360   // px band around the category row (BUG3)
+    property bool manageScreenEdges: false  // disable system screen edges while open
 
     // --- XMB wave background (ps3xmbwave port), injected from Plasmoid.configuration.
     //     Defaults mirror the demo (spline-settings.js / particles-settings.js). ---
@@ -65,6 +67,9 @@ Window {
     property var categories: []
 
     // --- window setup ---
+    // Unique title: matched by the KWin "keep above" rule (install-kwin-rule.sh) so the
+    // overlay stays above a revealing auto-hide panel.
+    title: "XMB Dashboard"
     width: Screen.width
     height: Screen.height
     color: "transparent"
@@ -84,10 +89,16 @@ Window {
     property bool autoCloseArmed: false
     property bool everActive: false
 
+    // Disables Plasma's own screen-EDGE actions while the overlay is up (restores on
+    // close), so the dashboard can own the edges. Corners stay active.
+    EdgeGuard { id: edgeGuard }
+
     function open() {
         console.log("XMB: Dashboard.open() called")
         autoCloseArmed = false
         everActive = false
+        if (dashboard.manageScreenEdges)
+            edgeGuard.disableSystemEdges()
         dashboard.showFullScreen()
         dashboard.raise()
         dashboard.requestActivate()
@@ -100,6 +111,7 @@ Window {
         console.log("XMB: Dashboard.close() called")
         autoCloseArmed = false
         everActive = false
+        edgeGuard.restoreSystemEdges()
         dashboard.visible = false
     }
     function toggle() {
@@ -245,6 +257,20 @@ Window {
         anchors.fill: parent
         focus: true
 
+        // Light blur over the XMB cross while the search, the top-bar power list, or a
+        // top-bar quick setting is active. Animated for a soft fade in/out; the layer is
+        // disabled once fully faded so there's no cost when idle.
+        readonly property bool blurWanted: searchOverlay.active || topBar.powerExpanded || topBar.contentHovered
+        property real blurAmt: blurWanted ? 0.45 : 0.0
+        Behavior on blurAmt { NumberAnimation { duration: 260; easing.type: Easing.InOutQuad } }
+        layer.enabled: blurAmt > 0.001
+        layer.effect: MultiEffect {
+            blurEnabled: true
+            blur: content.blurAmt
+            blurMax: 24
+            brightness: -0.08 * (content.blurAmt / 0.45)
+        }
+
         // The conceptual cross intersection (fixed, center-left like the PS3).
         readonly property real interX: width * dashboard.intersectionXFraction
         // The horizontal bar sits a little above centre; the selected app pins at
@@ -303,6 +329,9 @@ Window {
             iconSize: dashboard.appIconSize
             model: dashboard.appsModel
             z: 2
+            // Don't let the wheel scroll the app list while the top bar (quick settings)
+            // is under the pointer — the wheel adjusts those instead.
+            wheelLocked: topBar.contentHovered
             onAppLaunched: dashboard.close()
         }
 
@@ -317,8 +346,22 @@ Window {
         Keys.onEnterPressed:  appColumn.launchCurrent()
         Keys.onEscapePressed: dashboard.close()
 
-        // Scroll wheel: vertical -> apps, horizontal -> categories.
+        // Type-to-search: a printable letter/digit (no modifiers) opens the minimal
+        // KRunner overlay and seeds it with that character. Nav keys (empty text) fall
+        // through to the handlers above.
+        Keys.onPressed: (event) => {
+            if (!searchOverlay.active
+                    && event.text.length === 1 && event.text.trim().length === 1
+                    && !(event.modifiers & (Qt.ControlModifier | Qt.AltModifier | Qt.MetaModifier))) {
+                searchOverlay.start(event.text)
+                event.accepted = true
+            }
+        }
+
+        // Scroll wheel: vertical -> apps, horizontal -> categories. Disabled while the
+        // search overlay is active, so the wheel scrolls the results, not the app column.
         WheelHandler {
+            enabled: !searchOverlay.active && !topBar.contentHovered
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: (event) => {
                 if (event.angleDelta.y < 0)       appColumn.down()
@@ -337,5 +380,23 @@ Window {
         anchors.topMargin: Math.round(dashboard.height * 0.06)
         anchors.rightMargin: Math.round(dashboard.width * 0.025)
         pixelSize: Math.max(20, Math.round(dashboard.height * 0.026))
+    }
+
+    // Top-edge reveal: XMB system bar (Power for now). Self-contained, independent of
+    // Plasma's screen edges.
+    XmbTopBar {
+        id: topBar
+        anchors.fill: parent
+        z: 90
+        onActionTriggered: dashboard.close()
+    }
+
+    // Type-to-search (KRunner), minimal and centred. Opened by typing (see content above).
+    XmbSearch {
+        id: searchOverlay
+        anchors.fill: parent
+        z: 110
+        onLaunched: dashboard.close()
+        onClosed: content.forceActiveFocus()
     }
 }

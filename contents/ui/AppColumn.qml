@@ -21,6 +21,9 @@ Item {
     property alias model: list.model
     property alias currentIndex: list.currentIndex
     property alias count: list.count
+    // When true, the list ignores wheel/drag (e.g. while the top bar's quick settings
+    // are hovered, so the wheel adjusts those instead of scrolling the app list).
+    property bool wheelLocked: false
 
     signal appLaunched()
 
@@ -49,6 +52,7 @@ Item {
         spacing: Math.round(column.iconSize * 0.30)
         currentIndex: 0
         keyNavigationEnabled: false
+        interactive: !column.wheelLocked
 
         // Pin the current app to the intersection; glide the rest around it.
         preferredHighlightBegin: column.intersectionY - column.cellHeight / 2

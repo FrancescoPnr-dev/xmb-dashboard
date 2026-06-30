@@ -80,6 +80,13 @@
             <default>360</default>
         </entry>
 
+        <!-- Temporarily disable Plasma's screen-EDGE actions (switch-desktop-on-edge)
+             while the dashboard is open, restoring them on close. Reversible; touches
+             only kwinrc [Windows] ElectricBorders. -->
+        <entry name="manageScreenEdges" type="Bool">
+            <default>false</default>
+        </entry>
+
         <!-- ===== XMB wave background (Qt6 ShaderEffect port of the linkev
              ps3xmbwave demo). Defaults mirror the demo's spline-settings.js /
              particles-settings.js so the default look matches the demo. ===== -->
