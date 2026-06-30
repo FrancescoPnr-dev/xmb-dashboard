@@ -67,10 +67,9 @@ PlasmoidItem {
         waveColorB: Plasmoid.configuration.waveColorB
         waveGradientTopMul: Plasmoid.configuration.waveGradientTopMul
         waveGradientBotMul: Plasmoid.configuration.waveGradientBotMul
+        waveParticlesEnabled: Plasmoid.configuration.waveParticlesEnabled
         waveParticleCount: Plasmoid.configuration.waveParticleCount
         waveParticleOpacity: Plasmoid.configuration.waveParticleOpacity
-        waveParticleSizeBase: Plasmoid.configuration.waveParticleSizeBase
-        waveParticleSizeVar: Plasmoid.configuration.waveParticleSizeVar
         waveParticleFlowSpeed: Plasmoid.configuration.waveParticleFlowSpeed
     }
 

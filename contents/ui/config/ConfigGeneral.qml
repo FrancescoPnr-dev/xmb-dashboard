@@ -46,10 +46,9 @@ KCM.SimpleKCM {
     property alias cfg_waveColorB: waveColorBSlider.value
     property alias cfg_waveGradientTopMul: waveTopMulSlider.value
     property alias cfg_waveGradientBotMul: waveBotMulSlider.value
+    property alias cfg_waveParticlesEnabled: particlesEnabledCheck.checked
     property alias cfg_waveParticleCount: waveParticleCountSpin.value
     property alias cfg_waveParticleOpacity: waveParticleOpacitySlider.value
-    property alias cfg_waveParticleSizeBase: waveParticleSizeBaseSlider.value
-    property alias cfg_waveParticleSizeVar: waveParticleSizeVarSlider.value
     property alias cfg_waveParticleFlowSpeed: waveParticleFlowSpeedSlider.value
 
     // StringList of hidden category names. Every cfg_<key> MUST be an alias so the
@@ -70,6 +69,50 @@ KCM.SimpleKCM {
         else if (!hide && idx !== -1) arr.splice(idx, 1)
         cfg_hiddenCategories = arr
         hiddenSet = arr
+    }
+
+    // Per-section "reset to defaults" — each cfg_<key> has an auto-generated
+    // cfg_<key>Default from the config system.
+    function resetAppearance() {
+        cfg_backgroundOpacity = cfg_backgroundOpacityDefault
+        cfg_categoryIconSize = cfg_categoryIconSizeDefault
+        cfg_appIconSize = cfg_appIconSizeDefault
+        cfg_intersectionXFraction = cfg_intersectionXFractionDefault
+        cfg_panelIcon = cfg_panelIconDefault
+    }
+    function resetCategoryBar() {
+        cfg_hotZoneFractionLeft = cfg_hotZoneFractionLeftDefault
+        cfg_hotZoneFractionRight = cfg_hotZoneFractionRightDefault
+        cfg_hotZoneBandHeight = cfg_hotZoneBandHeightDefault
+        cfg_minScrollSpeed = cfg_minScrollSpeedDefault
+        cfg_maxScrollSpeed = cfg_maxScrollSpeedDefault
+        cfg_snapDuration = cfg_snapDurationDefault
+        cfg_magneticStrength = cfg_magneticStrengthDefault
+    }
+    function resetWave() {
+        cfg_waveFlowSpeed = cfg_waveFlowSpeedDefault
+        cfg_waveBandAmplitude = cfg_waveBandAmplitudeDefault
+        cfg_waveHeightScale = cfg_waveHeightScaleDefault
+        cfg_waveSoftClip = cfg_waveSoftClipDefault
+        cfg_waveTension = cfg_waveTensionDefault
+        cfg_waveFresnelPower = cfg_waveFresnelPowerDefault
+        cfg_waveFresnelScale = cfg_waveFresnelScaleDefault
+        cfg_waveOpacity = cfg_waveOpacityDefault
+        cfg_waveBrightness = cfg_waveBrightnessDefault
+        cfg_waveRowCount = cfg_waveRowCountDefault
+    }
+    function resetWaveColour() {
+        cfg_waveColorR = cfg_waveColorRDefault
+        cfg_waveColorG = cfg_waveColorGDefault
+        cfg_waveColorB = cfg_waveColorBDefault
+        cfg_waveGradientTopMul = cfg_waveGradientTopMulDefault
+        cfg_waveGradientBotMul = cfg_waveGradientBotMulDefault
+    }
+    function resetParticles() {
+        cfg_waveParticlesEnabled = cfg_waveParticlesEnabledDefault
+        cfg_waveParticleCount = cfg_waveParticleCountDefault
+        cfg_waveParticleOpacity = cfg_waveParticleOpacityDefault
+        cfg_waveParticleFlowSpeed = cfg_waveParticleFlowSpeedDefault
     }
 
     Kirigami.FormLayout {
@@ -125,6 +168,12 @@ KCM.SimpleKCM {
             id: iconField
             Kirigami.FormData.label: i18n("Panel icon name:")
             Layout.fillWidth: true
+        }
+
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetAppearance()
         }
 
         // ================= Category bar (mouse) =================
@@ -207,6 +256,12 @@ KCM.SimpleKCM {
             }
         }
 
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetCategoryBar()
+        }
+
         // ================== Wave background ==================
         // Ports the demo's Spline Controls (the impactful subset; ranges & defaults
         // from spline-settings.js). Remaining demo parameters keep the demo defaults
@@ -267,6 +322,12 @@ KCM.SimpleKCM {
             from: 24; to: 200; stepSize: 4
         }
 
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetWave()
+        }
+
         // ================== Wave colour ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Wave colour")
@@ -299,37 +360,47 @@ KCM.SimpleKCM {
             QQC2.Label { text: waveBotMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetWaveColour()
+        }
+
         // ================== Particles ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Particles")
             Kirigami.FormData.isSection: true
         }
 
+        QQC2.CheckBox {
+            id: particlesEnabledCheck
+            Kirigami.FormData.label: i18n("Particles:")
+            text: i18n("Enabled")
+        }
         QQC2.SpinBox {
             id: waveParticleCountSpin
             Kirigami.FormData.label: i18n("Count:")
             from: 10; to: 4000; stepSize: 10
             editable: true
+            enabled: particlesEnabledCheck.checked
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Opacity:")
+            enabled: particlesEnabledCheck.checked
             QQC2.Slider { id: waveParticleOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
             QQC2.Label { text: waveParticleOpacitySlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
-            Kirigami.FormData.label: i18n("Size base:")
-            QQC2.Slider { id: waveParticleSizeBaseSlider; from: 1.0; to: 40.0; stepSize: 0.1; Layout.fillWidth: true }
-            QQC2.Label { text: waveParticleSizeBaseSlider.value.toFixed(1); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
-        }
-        RowLayout {
-            Kirigami.FormData.label: i18n("Size variance:")
-            QQC2.Slider { id: waveParticleSizeVarSlider; from: 0.0; to: 50.0; stepSize: 0.1; Layout.fillWidth: true }
-            QQC2.Label { text: waveParticleSizeVarSlider.value.toFixed(1); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
-        }
-        RowLayout {
             Kirigami.FormData.label: i18n("Flow speed:")
+            enabled: particlesEnabledCheck.checked
             QQC2.Slider { id: waveParticleFlowSpeedSlider; from: 0.0; to: 3.0; stepSize: 0.01; Layout.fillWidth: true }
             QQC2.Label { text: waveParticleFlowSpeedSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetParticles()
         }
 
         // ================== Visible categories ==================
@@ -360,10 +431,18 @@ KCM.SimpleKCM {
             QQC2.CheckBox {
                 required property var model
                 required property int index
+                // Persist the locale-independent icon-name key; show the translated label.
+                readonly property string catKey: model.decoration ? String(model.decoration) : model.display
                 text: model.display
-                checked: page.hiddenSet.indexOf(model.display) === -1
-                onToggled: page.toggleCategory(model.display, !checked)
+                checked: page.hiddenSet.indexOf(catKey) === -1
+                onToggled: page.toggleCategory(catKey, !checked)
             }
+        }
+
+        QQC2.Button {
+            text: i18n("Show all categories")
+            icon.name: "edit-undo"
+            onClicked: { page.cfg_hiddenCategories = []; page.hiddenSet = [] }
         }
     }
 

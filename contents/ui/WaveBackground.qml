@@ -25,7 +25,6 @@ Item {
     // real-seconds clock (demo dtSec accumulator)
     property real time: 0
     property bool animating: true
-    readonly property real aspect: width / Math.max(1, height)
 
     // ---- gradient (resolveBackgroundGradient, 'default' RGB preset) ----
     property real colorR: 37
@@ -77,11 +76,12 @@ Item {
     property real brightness: 0.98
     property int  rowCount: 100        // GridMesh depth rows (demo mesh res 100)
 
-    // ---- particles (particles-settings.js defaults) ----
-    property real pFlowSpeed: 0.18
-    property real pOpacity: 0.75
-    property real pSizeBase: 2.6
-    property real pSizeVar: 1.5
+    // ---- particles ----
+    property bool particlesEnabled: true
+    property real pFlowSpeed: 0.8
+    property real pOpacity: 0.9
+    property real pSizeBase: 1.0     // fixed standard (no longer user-adjustable)
+    property real pSizeVar: 1.5      // fixed standard (no longer user-adjustable)
     property real pDensity: 1.0
 
     FrameAnimation {
@@ -151,10 +151,10 @@ Item {
     // ---- LAYER 3: additive sparkles ----
     ShaderEffect {
         anchors.fill: parent
+        visible: root.particlesEnabled        // particles on/off
         blending: true
         fragmentShader: "shaders/xmbparticles.frag.qsb"
         property real time: root.time
-        property real aspect: root.aspect
         property real pFlowSpeed: root.pFlowSpeed
         property real pOpacity: root.pOpacity
         property real pSizeBase: root.pSizeBase

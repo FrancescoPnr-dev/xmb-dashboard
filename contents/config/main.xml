@@ -45,12 +45,12 @@
 
         <!-- Width of the LEFT edge hot zone, as a fraction of screen width. -->
         <entry name="hotZoneFractionLeft" type="Double">
-            <default>0.35</default>
+            <default>0.15</default>
         </entry>
 
         <!-- Width of the RIGHT edge hot zone, as a fraction of screen width. -->
         <entry name="hotZoneFractionRight" type="Double">
-            <default>0.35</default>
+            <default>0.45</default>
         </entry>
 
         <!-- Scroll speed (px/sec) just inside the hot-zone threshold (fine control). -->
@@ -85,7 +85,7 @@
              particles-settings.js so the default look matches the demo. ===== -->
 
         <!-- Wave -->
-        <entry name="waveFlowSpeed" type="Double"><default>0.18</default></entry>
+        <entry name="waveFlowSpeed" type="Double"><default>0.25</default></entry>
         <entry name="waveBandAmplitude" type="Double"><default>0.2</default></entry>
         <entry name="waveHeightScale" type="Double"><default>0.5</default></entry>
         <entry name="waveSoftClip" type="Double"><default>0.22</default></entry>
@@ -104,10 +104,9 @@
         <entry name="waveGradientBotMul" type="Double"><default>0.62</default></entry>
 
         <!-- Particles -->
+        <entry name="waveParticlesEnabled" type="Bool"><default>true</default></entry>
         <entry name="waveParticleCount" type="Int"><default>2000</default></entry>
-        <entry name="waveParticleOpacity" type="Double"><default>0.75</default></entry>
-        <entry name="waveParticleSizeBase" type="Double"><default>2.6</default></entry>
-        <entry name="waveParticleSizeVar" type="Double"><default>1.5</default></entry>
-        <entry name="waveParticleFlowSpeed" type="Double"><default>0.18</default></entry>
+        <entry name="waveParticleOpacity" type="Double"><default>0.9</default></entry>
+        <entry name="waveParticleFlowSpeed" type="Double"><default>0.8</default></entry>
     </group>
 </kcfg>
