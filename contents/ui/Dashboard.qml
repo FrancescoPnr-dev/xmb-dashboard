@@ -35,7 +35,7 @@ Window {
 
     // --- XMB wave background (ps3xmbwave port), injected from Plasmoid.configuration.
     //     Defaults mirror the demo (spline-settings.js / particles-settings.js). ---
-    property real waveFlowSpeed: 0.18
+    property real waveFlowSpeed: 0.25
     property real waveBandAmplitude: 0.20
     property real waveHeightScale: 0.5
     property real waveSoftClip: 0.22
@@ -50,11 +50,10 @@ Window {
     property int  waveColorB: 179
     property real waveGradientTopMul: 0.09
     property real waveGradientBotMul: 0.62
+    property bool waveParticlesEnabled: true
     property int  waveParticleCount: 2000
-    property real waveParticleOpacity: 0.75
-    property real waveParticleSizeBase: 2.6
-    property real waveParticleSizeVar: 1.5
-    property real waveParticleFlowSpeed: 0.18
+    property real waveParticleOpacity: 0.9
+    property real waveParticleFlowSpeed: 0.8
 
     // The committed category (drives the app column). Updated only on a real
     // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
@@ -152,6 +151,10 @@ Window {
             required property var decoration
             readonly property string name: display
             readonly property var icon: decoration
+            // Stable, locale-independent key for persistence (the freedesktop icon
+            // name, e.g. "applications-games-symbolic"). Falls back to the display
+            // name only if a category exposes no icon.
+            readonly property string key: decoration ? String(decoration) : display
         }
         onObjectAdded: Qt.callLater(dashboard.rebuildCategories)
         onObjectRemoved: Qt.callLater(dashboard.rebuildCategories)
@@ -165,9 +168,9 @@ Window {
             var o = categorySource.objectAt(i)
             if (!o)
                 continue
-            if (hiddenCategories.indexOf(o.name) !== -1)
+            if (hiddenCategories.indexOf(o.key) !== -1)
                 continue
-            arr.push({ name: o.name, icon: o.icon, sourceRow: i })
+            arr.push({ name: o.name, icon: o.icon, key: o.key, sourceRow: i })
         }
         categories = arr
         // currentIndex is derived (read-only); CategoryBar self-clamps its position
@@ -225,11 +228,11 @@ Window {
             item.gradientTopMul = Qt.binding(function() { return dashboard.waveGradientTopMul })
             item.gradientBotMul = Qt.binding(function() { return dashboard.waveGradientBotMul })
             // particles
+            if (item.hasOwnProperty("particlesEnabled"))
+                item.particlesEnabled = Qt.binding(function() { return dashboard.waveParticlesEnabled })
             if (item.hasOwnProperty("pDensity"))
                 item.pDensity = Qt.binding(function() { return dashboard.waveParticleCount / 2000.0 })
             item.pOpacity = Qt.binding(function() { return dashboard.waveParticleOpacity })
-            item.pSizeBase = Qt.binding(function() { return dashboard.waveParticleSizeBase })
-            item.pSizeVar = Qt.binding(function() { return dashboard.waveParticleSizeVar })
             item.pFlowSpeed = Qt.binding(function() { return dashboard.waveParticleFlowSpeed })
         }
     }
