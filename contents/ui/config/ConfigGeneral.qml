@@ -41,6 +41,7 @@ KCM.SimpleKCM {
     property alias cfg_waveOpacity: waveOpacitySlider.value
     property alias cfg_waveBrightness: waveBrightnessSlider.value
     property alias cfg_waveRowCount: waveRowCountSpin.value
+    property alias cfg_waveColorMonth: monthCombo.currentIndex
     property alias cfg_waveColorR: waveColorRSlider.value
     property alias cfg_waveColorG: waveColorGSlider.value
     property alias cfg_waveColorB: waveColorBSlider.value
@@ -102,6 +103,7 @@ KCM.SimpleKCM {
         cfg_waveRowCount = cfg_waveRowCountDefault
     }
     function resetWaveColour() {
+        cfg_waveColorMonth = cfg_waveColorMonthDefault
         cfg_waveColorR = cfg_waveColorRDefault
         cfg_waveColorG = cfg_waveColorGDefault
         cfg_waveColorB = cfg_waveColorBDefault
@@ -334,28 +336,45 @@ KCM.SimpleKCM {
             Kirigami.FormData.isSection: true
         }
 
+        QQC2.ComboBox {
+            id: monthCombo
+            Kirigami.FormData.label: i18n("Colour preset:")
+            // index: 0 = Automatic, 1..12 = month, 13 = Custom (RGB sliders)
+            model: [i18n("Automatic (current month)"),
+                    i18n("January"), i18n("February"), i18n("March"), i18n("April"),
+                    i18n("May"), i18n("June"), i18n("July"), i18n("August"),
+                    i18n("September"), i18n("October"), i18n("November"), i18n("December"),
+                    i18n("Custom colour (RGB)")]
+        }
+
+        // RGB sliders apply only in Custom mode (index 13); otherwise the month preset wins.
         RowLayout {
             Kirigami.FormData.label: i18n("Colour R:")
+            enabled: monthCombo.currentIndex === 13
             QQC2.Slider { id: waveColorRSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
             QQC2.Label { text: Math.round(waveColorRSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Colour G:")
+            enabled: monthCombo.currentIndex === 13
             QQC2.Slider { id: waveColorGSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
             QQC2.Label { text: Math.round(waveColorGSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Colour B:")
+            enabled: monthCombo.currentIndex === 13
             QQC2.Slider { id: waveColorBSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
             QQC2.Label { text: Math.round(waveColorBSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Gradient top mul:")
+            enabled: monthCombo.currentIndex === 13
             QQC2.Slider { id: waveTopMulSlider; from: 0.0; to: 0.3; stepSize: 0.005; Layout.fillWidth: true }
             QQC2.Label { text: waveTopMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Gradient bottom mul:")
+            enabled: monthCombo.currentIndex === 13
             QQC2.Slider { id: waveBotMulSlider; from: 0.2; to: 1.2; stepSize: 0.005; Layout.fillWidth: true }
             QQC2.Label { text: waveBotMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }

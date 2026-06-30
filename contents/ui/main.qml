@@ -62,6 +62,7 @@ PlasmoidItem {
         waveOpacity: Plasmoid.configuration.waveOpacity
         waveBrightness: Plasmoid.configuration.waveBrightness
         waveRowCount: Plasmoid.configuration.waveRowCount
+        waveColorMonth: Plasmoid.configuration.waveColorMonth
         waveColorR: Plasmoid.configuration.waveColorR
         waveColorG: Plasmoid.configuration.waveColorG
         waveColorB: Plasmoid.configuration.waveColorB

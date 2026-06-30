@@ -44,7 +44,8 @@ Window {
     property real waveFresnelScale: 0.5
     property real waveOpacity: 0.7
     property real waveBrightness: 0.98
-    property int  waveRowCount: 100
+    property int  waveRowCount: 200
+    property int  waveColorMonth: 0
     property int  waveColorR: 37
     property int  waveColorG: 89
     property int  waveColorB: 179
@@ -222,6 +223,8 @@ Window {
             item.brightness = Qt.binding(function() { return dashboard.waveBrightness })
             item.rowCount = Qt.binding(function() { return dashboard.waveRowCount })
             // gradient / colour
+            if (item.hasOwnProperty("colorMonth"))
+                item.colorMonth = Qt.binding(function() { return dashboard.waveColorMonth })
             item.colorR = Qt.binding(function() { return dashboard.waveColorR })
             item.colorG = Qt.binding(function() { return dashboard.waveColorG })
             item.colorB = Qt.binding(function() { return dashboard.waveColorB })
