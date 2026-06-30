@@ -355,7 +355,7 @@ Window {
         // centre, so apps fan out above and below the bar without colliding with
         // the selected category icon. Tweak these two to taste.
         readonly property real barCenterY: height * 0.42
-        readonly property real appPinY: height * 0.52
+        readonly property real appPinY: height * 0.54
 
         // Click on empty space closes the dashboard.
         MouseArea {
@@ -405,6 +405,9 @@ Window {
             height: parent.height
             intersectionY: content.appPinY
             iconSize: dashboard.appIconSize
+            // Category-row geometry, so apps scrolled above the selection clear it.
+            categoryCenterY: content.barCenterY
+            categoryIconSize: dashboard.categoryIconSize
             model: dashboard.appsModel
             z: 2
             // Don't let the wheel scroll the app list while the top bar (quick settings)

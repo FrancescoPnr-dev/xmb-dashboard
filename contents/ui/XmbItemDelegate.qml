@@ -28,20 +28,48 @@ Item {
 
     signal clicked()
 
-    // Emphasis: shrink + fade non-selected items. We use `scale` (not a size
-    // change) so the layout spacing stays constant -> the classic XMB look where
-    // dimmed neighbours leave visible gaps around the focused item.
-    scale: selected ? 1.0 : 0.66
+    // Emphasis: shrink + fade non-selected items. We scale (not resize) so the
+    // layout spacing stays constant -> the classic XMB look where dimmed neighbours
+    // leave visible gaps around the focused item.
+    // Selected items pop to `selectedScale` (1.0 = unchanged, used by the category bar).
+    // The app column raises it so the focused app icon grows close to — but not equal
+    // to — the category icon, as on the PS3.
+    property real selectedScale: 1.0
+    property real emphasis: selected ? selectedScale : 0.66
     opacity: selected ? 1.0 : Math.max(0.30, 0.85 - neighbourDistance * 0.18)
 
-    Behavior on scale   { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
-    Behavior on opacity { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    Behavior on emphasis { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+    Behavior on opacity  { NumberAnimation { duration: 220; easing.type: Easing.OutCubic } }
+
+    // The app delegate spans the WHOLE column width (icon on the left, label far to
+    // the right), so scaling around the delegate centre (the default) would swing the
+    // shrunken icons sideways — the non-selected apps drift off to the side of their
+    // category instead of stacking under it. We therefore scale around the ICON's
+    // centre for the app style, so every app icon stays on the category's vertical
+    // line (as on the real PS3). The category style keeps the delegate centre.
+    // Optional vertical lift (px). The app column uses it so apps that scroll ABOVE
+    // the selected one clear the category icon and stack above it (PS3 style) instead
+    // of sliding over it. Animated, so the app "jumps over" the category as it rises.
+    // Stays 0 for the category bar.
+    property real extraTranslateY: 0
+    Behavior on extraTranslateY { NumberAnimation { duration: 240; easing.type: Easing.OutCubic } }
+
+    transform: [
+        Scale {
+            origin.x: delegate.labelBelow ? delegate.width / 2 : delegate.iconSize / 2
+            origin.y: delegate.height / 2
+            xScale: delegate.emphasis
+            yScale: delegate.emphasis
+        },
+        Translate { y: delegate.extraTranslateY }
+    ]
 
     // ---- category layout: icon with a label underneath ----
     Column {
         visible: delegate.labelBelow
         anchors.centerIn: parent
-        spacing: Math.round(delegate.iconSize * 0.12)
+        // Keep the category name tucked under its icon (not drifting toward the app row).
+        spacing: Math.round(delegate.iconSize * 0.02)
 
         Kirigami.Icon {
             anchors.horizontalCenter: parent.horizontalCenter
