@@ -80,6 +80,10 @@ PlasmoidItem {
         navSoundMode: Plasmoid.configuration.navSoundMode
         navSoundFile: Plasmoid.configuration.navSoundFile
         navSoundVolume: Plasmoid.configuration.navSoundVolume
+
+        // Background ambience
+        ambientSoundEnabled: Plasmoid.configuration.ambientSoundEnabled
+        ambientSoundVolume: Plasmoid.configuration.ambientSoundVolume
     }
 
     // Global shortcut / standard activation path (keyboard, "activate" action).

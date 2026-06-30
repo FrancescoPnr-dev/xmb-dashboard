@@ -13,6 +13,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Effects
+import QtMultimedia
 import org.kde.plasma.private.kicker as Kicker
 import org.kde.kitemmodels as KItemModels
 
@@ -73,6 +74,13 @@ Window {
                : (navSoundFile.indexOf("://") !== -1 ? Qt.url(navSoundFile)
                   : Qt.url("file://" + navSoundFile)))
         : Qt.resolvedUrl("../sounds/nav-tick.wav")
+
+    // Looping background ambience, faded in on open / out on close.
+    property bool ambientSoundEnabled: true
+    property real ambientSoundVolume: 0.35
+    // Fade level (0..1), animated; multiplied by the configured volume.
+    property real ambientLevel: 0.0
+    Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
 
     // The committed category (drives the app column). Updated only on a real
     // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
@@ -142,7 +150,19 @@ Window {
         dashboard.visible ? close() : open()
     }
 
-    onVisibleChanged: console.log("XMB: Dashboard visibleChanged -> " + visible)
+    onVisibleChanged: {
+        console.log("XMB: Dashboard visibleChanged -> " + visible)
+        if (visible) {
+            if (ambientSoundEnabled) {
+                ambientStopTimer.stop()
+                ambientLoop.play()        // loops forever (loops: Infinite)
+                ambientLevel = 1.0        // Behavior fades it in
+            }
+        } else {
+            ambientLevel = 0.0            // fade out, then stop to free the device
+            ambientStopTimer.restart()
+        }
+    }
 
     onActiveChanged: {
         if (active) {
@@ -511,6 +531,21 @@ Window {
         id: navSound
         source: dashboard.navSoundSource
         volume: dashboard.navSoundVolume
+    }
+
+    // Looping background pad (bundled original). Gapless loop via SoundEffect; the
+    // volume tracks the animated fade level so it eases in on open / out on close.
+    SoundEffect {
+        id: ambientLoop
+        source: Qt.resolvedUrl("../sounds/ambient-loop.wav")
+        loops: SoundEffect.Infinite
+        volume: dashboard.ambientLevel * dashboard.ambientSoundVolume
+    }
+    // Stop the loop once it has faded out, so it isn't running while closed.
+    Timer {
+        id: ambientStopTimer
+        interval: 1500
+        onTriggered: ambientLoop.stop()
     }
     function playNavTick() {
         // Only while open and past the open transition, so we don't tick on the

@@ -134,5 +134,10 @@
         <entry name="navSoundMode" type="Int"><default>0</default></entry>
         <entry name="navSoundFile" type="String"><default></default></entry>
         <entry name="navSoundVolume" type="Double"><default>0.6</default></entry>
+
+        <!-- Looping ambient pad played softly under the dashboard, fading in on open
+             and out on close. Bundled original (not the Sony startup track). -->
+        <entry name="ambientSoundEnabled" type="Bool"><default>true</default></entry>
+        <entry name="ambientSoundVolume" type="Double"><default>0.35</default></entry>
     </group>
 </kcfg>
