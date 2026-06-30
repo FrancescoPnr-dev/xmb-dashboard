@@ -28,6 +28,26 @@ Item {
     signal appLaunched()
 
     readonly property int cellHeight: Math.round(iconSize * 1.45)
+    readonly property real listSpacing: Math.round(iconSize * 0.30)
+
+    // Category-row geometry (in this column's coords, which share content's origin),
+    // so apps scrolled ABOVE the selection can be lifted clear of the category icon.
+    property real categoryCenterY: 0
+    property int  categoryIconSize: 112
+
+    // Focused app icon is just a touch larger than the dimmed neighbours — a few px,
+    // not a category-sized jump.
+    readonly property real selectedAppScale: 1.15
+
+    // Extra upward lift applied to every app above the selected one, so the first of
+    // them sits just above the category icon (the rest stack above it normally). This
+    // opens the PS3 "gap" at the category row: above-apps jump over it, never overlap.
+    readonly property real aboveGap: {
+        var naturalAboveCenter = intersectionY - (cellHeight + listSpacing)
+        var categoryTop = categoryCenterY - categoryIconSize / 2
+        var desiredAboveCenter = categoryTop - cellHeight / 2 - Math.round(iconSize * 0.25)
+        return Math.max(0, naturalAboveCenter - desiredAboveCenter)
+    }
 
     // Optional launch override: when set, called with the current row index instead of
     // model.trigger() (used by the Favourites category, whose ListModel has no trigger()).
@@ -48,17 +68,22 @@ Item {
         }
     }
 
-    // When the selected category changes, restart from the top and cross-fade in.
+    // When the selected category changes, select the FIRST app and pin it at the cross
+    // (the intersection), with empty space above and the rest flowing down — like the
+    // PS3, where entering a category lands you on its first item. NOTE: we snap index 0
+    // to the highlight position, NOT positionViewAtBeginning(): the latter parks index 0
+    // at the very TOP of the view, which fights StrictlyEnforceRange and leaves a
+    // mid-list app sitting at the cross instead of the first one.
     onModelChanged: {
         list.currentIndex = 0
-        list.positionViewAtBeginning()
+        list.positionViewAtIndex(0, ListView.SnapPosition)
         fade.restart()
     }
 
     ListView {
         id: list
         anchors.fill: parent
-        spacing: Math.round(column.iconSize * 0.30)
+        spacing: column.listSpacing
         currentIndex: 0
         keyNavigationEnabled: false
         interactive: !column.wheelLocked
@@ -88,6 +113,10 @@ Item {
             // cannot be selected by the mouse (navigation is via the wheel).
             interactive: ListView.isCurrentItem
             neighbourDistance: Math.abs(index - list.currentIndex)
+            // Apps above the selection jump over the category and stack above it.
+            extraTranslateY: index < list.currentIndex ? -column.aboveGap : 0
+            // Focused app icon grows close to the category icon's size.
+            selectedScale: column.selectedAppScale
 
             onClicked: column.launchCurrent()   // only the centred app can fire this
         }
