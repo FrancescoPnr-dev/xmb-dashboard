@@ -33,6 +33,29 @@ Window {
     property real magneticStrength: 0.7
     property int  hotZoneBandHeight: 360   // px band around the category row (BUG3)
 
+    // --- XMB wave background (ps3xmbwave port), injected from Plasmoid.configuration.
+    //     Defaults mirror the demo (spline-settings.js / particles-settings.js). ---
+    property real waveFlowSpeed: 0.18
+    property real waveBandAmplitude: 0.20
+    property real waveHeightScale: 0.5
+    property real waveSoftClip: 0.22
+    property real waveTension: 0.12
+    property real waveFresnelPower: 4.0
+    property real waveFresnelScale: 0.5
+    property real waveOpacity: 0.7
+    property real waveBrightness: 0.98
+    property int  waveRowCount: 100
+    property int  waveColorR: 37
+    property int  waveColorG: 89
+    property int  waveColorB: 179
+    property real waveGradientTopMul: 0.09
+    property real waveGradientBotMul: 0.62
+    property int  waveParticleCount: 2000
+    property real waveParticleOpacity: 0.75
+    property real waveParticleSizeBase: 2.6
+    property real waveParticleSizeVar: 1.5
+    property real waveParticleFlowSpeed: 0.18
+
     // The committed category (drives the app column). Updated only on a real
     // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
     // of a glide, so the app list does not reload while the bar is scrolling.
@@ -165,12 +188,50 @@ Window {
     // Visuals
     // ---------------------------------------------------------------------
 
-    // Dark semi-transparent backdrop. (Blur behind it would need the KWin blur
-    // protocol, which a plain Window can't request on Wayland -- see README.)
-    Rectangle {
+    // Animated XMB wave backdrop (Qt6 ShaderEffect port of the linkev/PlayStation-3-XMB
+    // ps3xmbwave demo). Loaded through a Loader so that if ShaderEffect is unavailable
+    // (Qt Quick software backend) we fall back to a flat gradient and the dashboard still
+    // opens. backgroundOpacity dims the whole backdrop over the desktop.
+    Loader {
+        id: backgroundLoader
         anchors.fill: parent
-        color: Qt.rgba(0, 0, 0, dashboard.backgroundOpacity)
-        Behavior on color { ColorAnimation { duration: 150 } }
+        opacity: dashboard.backgroundOpacity
+        Behavior on opacity { NumberAnimation { duration: 150 } }
+        source: Qt.resolvedUrl("WaveBackground.qml")
+
+        onStatusChanged: {
+            if (status === Loader.Error) {
+                console.warn("XMB: ShaderEffect unavailable, using gradient fallback")
+                source = Qt.resolvedUrl("WaveBackgroundFallback.qml")
+            }
+        }
+        onLoaded: {
+            item.animating = Qt.binding(function() { return dashboard.visible })
+            // wave
+            item.flowSpeed = Qt.binding(function() { return dashboard.waveFlowSpeed })
+            item.bandAmplitude = Qt.binding(function() { return dashboard.waveBandAmplitude })
+            item.waveHeightScale = Qt.binding(function() { return dashboard.waveHeightScale })
+            item.waveSoftClip = Qt.binding(function() { return dashboard.waveSoftClip })
+            item.tension = Qt.binding(function() { return dashboard.waveTension })
+            item.fresnelPower = Qt.binding(function() { return dashboard.waveFresnelPower })
+            item.fresnelScale = Qt.binding(function() { return dashboard.waveFresnelScale })
+            item.waveOpacity = Qt.binding(function() { return dashboard.waveOpacity })
+            item.brightness = Qt.binding(function() { return dashboard.waveBrightness })
+            item.rowCount = Qt.binding(function() { return dashboard.waveRowCount })
+            // gradient / colour
+            item.colorR = Qt.binding(function() { return dashboard.waveColorR })
+            item.colorG = Qt.binding(function() { return dashboard.waveColorG })
+            item.colorB = Qt.binding(function() { return dashboard.waveColorB })
+            item.gradientTopMul = Qt.binding(function() { return dashboard.waveGradientTopMul })
+            item.gradientBotMul = Qt.binding(function() { return dashboard.waveGradientBotMul })
+            // particles
+            if (item.hasOwnProperty("pDensity"))
+                item.pDensity = Qt.binding(function() { return dashboard.waveParticleCount / 2000.0 })
+            item.pOpacity = Qt.binding(function() { return dashboard.waveParticleOpacity })
+            item.pSizeBase = Qt.binding(function() { return dashboard.waveParticleSizeBase })
+            item.pSizeVar = Qt.binding(function() { return dashboard.waveParticleSizeVar })
+            item.pFlowSpeed = Qt.binding(function() { return dashboard.waveParticleFlowSpeed })
+        }
     }
 
     FocusScope {

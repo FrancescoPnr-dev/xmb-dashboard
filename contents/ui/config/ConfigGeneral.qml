@@ -30,6 +30,28 @@ KCM.SimpleKCM {
     property alias cfg_magneticStrength: magneticSlider.value
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
 
+    // XMB wave background (ps3xmbwave port)
+    property alias cfg_waveFlowSpeed: waveFlowSpeedSlider.value
+    property alias cfg_waveBandAmplitude: waveBandAmpSlider.value
+    property alias cfg_waveHeightScale: waveHeightScaleSlider.value
+    property alias cfg_waveSoftClip: waveSoftClipSlider.value
+    property alias cfg_waveTension: waveTensionSlider.value
+    property alias cfg_waveFresnelPower: waveFresnelPowerSlider.value
+    property alias cfg_waveFresnelScale: waveFresnelScaleSlider.value
+    property alias cfg_waveOpacity: waveOpacitySlider.value
+    property alias cfg_waveBrightness: waveBrightnessSlider.value
+    property alias cfg_waveRowCount: waveRowCountSpin.value
+    property alias cfg_waveColorR: waveColorRSlider.value
+    property alias cfg_waveColorG: waveColorGSlider.value
+    property alias cfg_waveColorB: waveColorBSlider.value
+    property alias cfg_waveGradientTopMul: waveTopMulSlider.value
+    property alias cfg_waveGradientBotMul: waveBotMulSlider.value
+    property alias cfg_waveParticleCount: waveParticleCountSpin.value
+    property alias cfg_waveParticleOpacity: waveParticleOpacitySlider.value
+    property alias cfg_waveParticleSizeBase: waveParticleSizeBaseSlider.value
+    property alias cfg_waveParticleSizeVar: waveParticleSizeVarSlider.value
+    property alias cfg_waveParticleFlowSpeed: waveParticleFlowSpeedSlider.value
+
     // StringList of hidden category names. Every cfg_<key> MUST be an alias so the
     // config system can auto-generate the matching cfg_<key>Default; a plain
     // `property var cfg_hiddenCategories` breaks that for ALL keys. So back it with
@@ -183,6 +205,131 @@ KCM.SimpleKCM {
                 Layout.minimumWidth: valueColumnWidth
                 horizontalAlignment: Text.AlignRight
             }
+        }
+
+        // ================== Wave background ==================
+        // Ports the demo's Spline Controls (the impactful subset; ranges & defaults
+        // from spline-settings.js). Remaining demo parameters keep the demo defaults
+        // (set in WaveBackground.qml).
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Wave background")
+            Kirigami.FormData.isSection: true
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: i18n("Flow speed:")
+            QQC2.Slider { id: waveFlowSpeedSlider; from: 0.0; to: 1.2; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveFlowSpeedSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Band amplitude:")
+            QQC2.Slider { id: waveBandAmpSlider; from: 0.0; to: 0.6; stepSize: 0.002; Layout.fillWidth: true }
+            QQC2.Label { text: waveBandAmpSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Wave height:")
+            QQC2.Slider { id: waveHeightScaleSlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveHeightScaleSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Soft clip:")
+            QQC2.Slider { id: waveSoftClipSlider; from: 0.05; to: 0.5; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveSoftClipSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Tension:")
+            QQC2.Slider { id: waveTensionSlider; from: 0.0; to: 0.5; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveTensionSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Fresnel power:")
+            QQC2.Slider { id: waveFresnelPowerSlider; from: 0.2; to: 8.0; stepSize: 0.05; Layout.fillWidth: true }
+            QQC2.Label { text: waveFresnelPowerSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Fresnel scale:")
+            QQC2.Slider { id: waveFresnelScaleSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: waveFresnelScaleSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Wave opacity:")
+            QQC2.Slider { id: waveOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveOpacitySlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Brightness:")
+            QQC2.Slider { id: waveBrightnessSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: waveBrightnessSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        QQC2.SpinBox {
+            id: waveRowCountSpin
+            Kirigami.FormData.label: i18n("Wave detail (rows):")
+            from: 24; to: 200; stepSize: 4
+        }
+
+        // ================== Wave colour ==================
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Wave colour")
+            Kirigami.FormData.isSection: true
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: i18n("Colour R:")
+            QQC2.Slider { id: waveColorRSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Label { text: Math.round(waveColorRSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Colour G:")
+            QQC2.Slider { id: waveColorGSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Label { text: Math.round(waveColorGSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Colour B:")
+            QQC2.Slider { id: waveColorBSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Label { text: Math.round(waveColorBSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Gradient top mul:")
+            QQC2.Slider { id: waveTopMulSlider; from: 0.0; to: 0.3; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveTopMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Gradient bottom mul:")
+            QQC2.Slider { id: waveBotMulSlider; from: 0.2; to: 1.2; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Label { text: waveBotMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+
+        // ================== Particles ==================
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Particles")
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.SpinBox {
+            id: waveParticleCountSpin
+            Kirigami.FormData.label: i18n("Count:")
+            from: 10; to: 4000; stepSize: 10
+            editable: true
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Opacity:")
+            QQC2.Slider { id: waveParticleOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: waveParticleOpacitySlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Size base:")
+            QQC2.Slider { id: waveParticleSizeBaseSlider; from: 1.0; to: 40.0; stepSize: 0.1; Layout.fillWidth: true }
+            QQC2.Label { text: waveParticleSizeBaseSlider.value.toFixed(1); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Size variance:")
+            QQC2.Slider { id: waveParticleSizeVarSlider; from: 0.0; to: 50.0; stepSize: 0.1; Layout.fillWidth: true }
+            QQC2.Label { text: waveParticleSizeVarSlider.value.toFixed(1); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Flow speed:")
+            QQC2.Slider { id: waveParticleFlowSpeedSlider; from: 0.0; to: 3.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: waveParticleFlowSpeedSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
         // ================== Visible categories ==================
