@@ -29,6 +29,7 @@ KCM.SimpleKCM {
     property alias cfg_snapDuration: snapDurationSpin.value
     property alias cfg_magneticStrength: magneticSlider.value
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
+    property alias cfg_manageScreenEdges: manageScreenEdgesCheck.checked
 
     // XMB wave background (ps3xmbwave port)
     property alias cfg_waveFlowSpeed: waveFlowSpeedSlider.value
@@ -176,6 +177,18 @@ KCM.SimpleKCM {
             text: i18n("Reset section to defaults")
             icon.name: "edit-undo"
             onClicked: page.resetAppearance()
+        }
+
+        // ================== Behaviour ==================
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Behaviour")
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.CheckBox {
+            id: manageScreenEdgesCheck
+            Kirigami.FormData.label: i18n("Screen edges:")
+            text: i18n("Disable system edges while the dashboard is open")
         }
 
         // ================= Category bar (mouse) =================

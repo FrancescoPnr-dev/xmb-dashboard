@@ -50,6 +50,7 @@ PlasmoidItem {
         snapDuration: Plasmoid.configuration.snapDuration
         magneticStrength: Plasmoid.configuration.magneticStrength
         hotZoneBandHeight: Plasmoid.configuration.hotZoneBandHeight
+        manageScreenEdges: Plasmoid.configuration.manageScreenEdges
 
         // XMB wave background (ps3xmbwave port)
         waveFlowSpeed: Plasmoid.configuration.waveFlowSpeed
