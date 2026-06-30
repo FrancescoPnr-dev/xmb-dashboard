@@ -79,5 +79,35 @@
         <entry name="hotZoneBandHeight" type="Int">
             <default>360</default>
         </entry>
+
+        <!-- ===== XMB wave background (Qt6 ShaderEffect port of the linkev
+             ps3xmbwave demo). Defaults mirror the demo's spline-settings.js /
+             particles-settings.js so the default look matches the demo. ===== -->
+
+        <!-- Wave -->
+        <entry name="waveFlowSpeed" type="Double"><default>0.18</default></entry>
+        <entry name="waveBandAmplitude" type="Double"><default>0.2</default></entry>
+        <entry name="waveHeightScale" type="Double"><default>0.5</default></entry>
+        <entry name="waveSoftClip" type="Double"><default>0.22</default></entry>
+        <entry name="waveTension" type="Double"><default>0.12</default></entry>
+        <entry name="waveFresnelPower" type="Double"><default>4.0</default></entry>
+        <entry name="waveFresnelScale" type="Double"><default>0.5</default></entry>
+        <entry name="waveOpacity" type="Double"><default>0.7</default></entry>
+        <entry name="waveBrightness" type="Double"><default>0.98</default></entry>
+        <entry name="waveRowCount" type="Int"><default>100</default></entry>
+
+        <!-- Gradient / colour (RGB-slider 'default' preset) -->
+        <entry name="waveColorR" type="Int"><default>37</default></entry>
+        <entry name="waveColorG" type="Int"><default>89</default></entry>
+        <entry name="waveColorB" type="Int"><default>179</default></entry>
+        <entry name="waveGradientTopMul" type="Double"><default>0.09</default></entry>
+        <entry name="waveGradientBotMul" type="Double"><default>0.62</default></entry>
+
+        <!-- Particles -->
+        <entry name="waveParticleCount" type="Int"><default>2000</default></entry>
+        <entry name="waveParticleOpacity" type="Double"><default>0.75</default></entry>
+        <entry name="waveParticleSizeBase" type="Double"><default>2.6</default></entry>
+        <entry name="waveParticleSizeVar" type="Double"><default>1.5</default></entry>
+        <entry name="waveParticleFlowSpeed" type="Double"><default>0.18</default></entry>
     </group>
 </kcfg>
