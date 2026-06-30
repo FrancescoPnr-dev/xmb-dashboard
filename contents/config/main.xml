@@ -126,5 +126,13 @@
         <entry name="waveParticleCount" type="Int"><default>2000</default></entry>
         <entry name="waveParticleOpacity" type="Double"><default>1.0</default></entry>
         <entry name="waveParticleFlowSpeed" type="Double"><default>0.8</default></entry>
+
+        <!-- ===== Navigation sound ===== -->
+        <!-- navSoundMode: 0 = bundled XMB-style tick, 1 = custom file (navSoundFile),
+             2 = off. The original PS3 sound is NOT shipped (Sony copyright); point the
+             custom file at your own local copy to use it. -->
+        <entry name="navSoundMode" type="Int"><default>0</default></entry>
+        <entry name="navSoundFile" type="String"><default></default></entry>
+        <entry name="navSoundVolume" type="Double"><default>0.6</default></entry>
     </group>
 </kcfg>

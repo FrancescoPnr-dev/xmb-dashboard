@@ -59,6 +59,21 @@ Window {
     property real waveParticleOpacity: 0.9
     property real waveParticleFlowSpeed: 0.8
 
+    // --- Navigation sound (injected from Plasmoid.configuration) ---
+    // navSoundMode: 0 = bundled XMB-style tick, 1 = custom file, 2 = off.
+    property int  navSoundMode: 0
+    property string navSoundFile: ""
+    property real navSoundVolume: 0.6
+    // Resolve the active tick source. The original PS3 sound is never bundled; mode 1
+    // loads whatever local file the user points at (their own copy).
+    readonly property url navSoundSource:
+        navSoundMode === 2 ? Qt.url("")
+        : navSoundMode === 1
+            ? (navSoundFile.length === 0 ? Qt.url("")
+               : (navSoundFile.indexOf("://") !== -1 ? Qt.url(navSoundFile)
+                  : Qt.url("file://" + navSoundFile)))
+        : Qt.resolvedUrl("../sounds/nav-tick.wav")
+
     // The committed category (drives the app column). Updated only on a real
     // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
     // of a glide, so the app list does not reload while the bar is scrolling.
@@ -487,5 +502,43 @@ Window {
         z: 110
         onLaunched: dashboard.close()
         onClosed: content.forceActiveFocus()
+    }
+
+    // ---------------------------------------------------------------------
+    // Navigation sound (the PS3 "tick" as the cursor moves)
+    // ---------------------------------------------------------------------
+    XmbSound {
+        id: navSound
+        source: dashboard.navSoundSource
+        volume: dashboard.navSoundVolume
+    }
+    function playNavTick() {
+        // Only while open and past the open transition, so we don't tick on the
+        // initial layout / model population.
+        if (!dashboard.visible || !dashboard.autoCloseArmed || dashboard.navSoundMode === 2)
+            return
+        navSound.play()
+    }
+
+    // Switching category resets the app column to its first item; swallow that
+    // (and any settling) for a moment so it doesn't fire a spurious app tick.
+    Timer { id: catSwitchGuard; interval: 250 }
+    Connections {
+        target: dashboard
+        function onCommittedIndexChanged() { catSwitchGuard.restart() }
+    }
+    // Category cursor moved (keyboard, wheel, or hot-zone glide past each category).
+    Connections {
+        target: categoryBar
+        function onCurrentIndexChanged() { dashboard.playNavTick() }
+    }
+    // App cursor moved (up/down) — but not the auto-reset when the category changes.
+    Connections {
+        target: appColumn
+        function onCurrentIndexChanged() {
+            if (catSwitchGuard.running)
+                return
+            dashboard.playNavTick()
+        }
     }
 }
