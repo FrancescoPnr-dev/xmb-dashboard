@@ -29,11 +29,20 @@ Item {
 
     readonly property int cellHeight: Math.round(iconSize * 1.45)
 
+    // Optional launch override: when set, called with the current row index instead of
+    // model.trigger() (used by the Favourites category, whose ListModel has no trigger()).
+    property var launchHandler: null
+
     // Navigation entry points used by Dashboard's key handler.
     function up()   { list.decrementCurrentIndex() }
     function down() { list.incrementCurrentIndex() }
     function launchCurrent() {
-        if (list.model && list.currentIndex >= 0) {
+        if (list.currentIndex < 0)
+            return
+        if (column.launchHandler) {
+            column.launchHandler(list.currentIndex)
+            column.appLaunched()
+        } else if (list.model) {
             list.model.trigger(list.currentIndex, "", null)
             column.appLaunched()
         }

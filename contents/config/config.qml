@@ -11,4 +11,9 @@ ConfigModel {
         icon: "applications-all"
         source: "config/ConfigGeneral.qml"
     }
+    ConfigCategory {
+        name: i18n("Favorites")
+        icon: "bookmarks"
+        source: "config/ConfigFavorites.qml"
+    }
 }
