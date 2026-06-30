@@ -322,4 +322,14 @@ Window {
             }
         }
     }
+
+    // PS3-style system date + time, top-right.
+    XmbClock {
+        z: 100
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: Math.round(dashboard.height * 0.06)
+        anchors.rightMargin: Math.round(dashboard.width * 0.025)
+        pixelSize: Math.max(20, Math.round(dashboard.height * 0.026))
+    }
 }
