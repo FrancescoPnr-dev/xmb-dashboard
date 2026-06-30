@@ -57,6 +57,8 @@ KCM.SimpleKCM {
     property alias cfg_navSoundMode: navSoundCombo.currentIndex
     property alias cfg_navSoundFile: navSoundFileField.text
     property alias cfg_navSoundVolume: navSoundVolumeSlider.value
+    property alias cfg_ambientSoundEnabled: ambientEnabledCheck.checked
+    property alias cfg_ambientSoundVolume: ambientVolumeSlider.value
 
     // StringList of hidden category names. Every cfg_<key> MUST be an alias so the
     // config system can auto-generate the matching cfg_<key>Default; a plain
@@ -127,6 +129,8 @@ KCM.SimpleKCM {
     property int    cfg_navSoundModeDefault: 0
     property string cfg_navSoundFileDefault: ""
     property real   cfg_navSoundVolumeDefault: 0.6
+    property bool   cfg_ambientSoundEnabledDefault: true
+    property real   cfg_ambientSoundVolumeDefault: 0.35
 
     function resetAppearance() {
         cfg_backgroundOpacity = cfg_backgroundOpacityDefault
@@ -174,6 +178,8 @@ KCM.SimpleKCM {
         cfg_navSoundMode = cfg_navSoundModeDefault
         cfg_navSoundFile = cfg_navSoundFileDefault
         cfg_navSoundVolume = cfg_navSoundVolumeDefault
+        cfg_ambientSoundEnabled = cfg_ambientSoundEnabledDefault
+        cfg_ambientSoundVolume = cfg_ambientSoundVolumeDefault
     }
 
     Kirigami.FormLayout {
@@ -526,6 +532,18 @@ KCM.SimpleKCM {
             enabled: navSoundCombo.currentIndex !== 2
             QQC2.Slider { id: navSoundVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
             QQC2.Label { text: Math.round(navSoundVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+        }
+
+        QQC2.CheckBox {
+            id: ambientEnabledCheck
+            Kirigami.FormData.label: i18n("Background ambience:")
+            text: i18n("Play a soft looping pad while the dashboard is open")
+        }
+        RowLayout {
+            Kirigami.FormData.label: i18n("Ambience volume:")
+            enabled: ambientEnabledCheck.checked
+            QQC2.Slider { id: ambientVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Label { text: Math.round(ambientVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
         QQC2.Button {
