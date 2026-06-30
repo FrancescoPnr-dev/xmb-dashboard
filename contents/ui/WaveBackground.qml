@@ -204,5 +204,18 @@ Item {
         property real pSizeBase: root.pSizeBase
         property real pSizeVar: root.pSizeVar
         property real pDensity: root.pDensity
+        // wave centre-line (so sparkles follow the veil) — shared with the wave shader
+        property real flowSpeed: root.flowSpeed
+        property real timeStep: root.timeStep
+        property real rePipelineBlend: root.rePipelineBlend
+        property real bandAmplitude: root.bandAmplitude
+        property real waveCosAmp: root.waveCosAmp
+        property real waveBias: root.waveBias
+        property real waveHeightScale: root.waveHeightScale
+        property real waveSoftClip: root.waveSoftClip
+        property real tension: root.tension
+        property real splineLength: root.splineLength
+        property real ffdScale1X: root.ffdScale1X
+        property real ffdYAmp: root.ffdYAmp
     }
 }

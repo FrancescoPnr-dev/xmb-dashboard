@@ -1,11 +1,10 @@
 // XMB particles — fragment shader (fullscreen ShaderEffect, additive).
 //
-// The demo draws 2000 additive GL_POINTS whose positions come from a per-vertex seed
-// shader (particles.js). True GL_POINTS needs a custom QSGGeometry (C++); in pure QML the
-// faithful-and-cheap equivalent is a hashed twinkling starfield evaluated with a fixed
-// 3x3 cell neighbourhood per pixel (constant cost — NOT a per-pixel loop over the wave).
-// White, additive, clustered in the centre band, slow drift + twinkle, matching the demo
-// look and its count/opacity/size/flowSpeed controls.
+// Additive twinkling sparkle field that FOLLOWS the wave veil instead of sitting in a
+// fixed symmetric horizontal band. waveCenter() reproduces the wave's centre-line
+// (the same displacement math as xmbwave.vert, evaluated at z=0, dominant terms), so the
+// sparkle cloud hugs the curving veil and undulates in sync with the flow over time.
+// Constant cost (fixed 3x3 hash neighbourhood per pixel), white, additive.
 
 #version 440
 
@@ -21,12 +20,42 @@ layout(std140, binding = 0) uniform buf {
     float pSizeBase;
     float pSizeVar;
     float pDensity;
+    // wave centre-line (dominant displacement terms, shared with the wave shader)
+    float flowSpeed;
+    float timeStep;
+    float rePipelineBlend;
+    float bandAmplitude;
+    float waveCosAmp;
+    float waveBias;
+    float waveHeightScale;
+    float waveSoftClip;
+    float tension;
+    float splineLength;
+    float ffdScale1X;
+    float ffdYAmp;
 };
 
 vec2 hash22(vec2 p)
 {
     float n = dot(p, vec2(127.1, 311.7));
     return fract(sin(vec2(n, n + 1.0)) * 43758.5453123);
+}
+
+// Wave veil centre-line (clip-y) at width-coord ux. Mirrors xmbwave.vert screen-Y at
+// z=0 using the visually dominant terms (primary band + ffd wobble + soft-clipped arch).
+float waveCenter(float ux, float t)
+{
+    float flow = t * flowSpeed * timeStep;
+    float sx = ux * 2.0 - 1.0;
+
+    float h = sin(flow * 0.25 + ux * 6.2) * bandAmplitude * rePipelineBlend;
+    h += sin(sx * ffdScale1X + t * flowSpeed) * ffdYAmp;
+
+    float baseWave = cos(sx * 2.0 - t * 0.5 * timeStep) * waveCosAmp + waveBias;
+    baseWave += tension * sin(sx * splineLength + t * flowSpeed * timeStep * 0.25);
+    float totalWave = waveSoftClip * tanh((baseWave * waveHeightScale) / max(waveSoftClip, 1e-4));
+
+    return h - totalWave;
 }
 
 void main()
@@ -50,8 +79,16 @@ void main()
             spark += dot1 * tw * tw;
         }
     }
-    // centre-band weighting (demo particles live around clip-y 0)
-    float band = smoothstep(0.62, 0.0, abs(uv.y - 0.5) * 2.0);
-    float a = clamp(spark * pOpacity * band, 0.0, 1.0);
-    fragColor = vec4(vec3(a), a) * qt_Opacity;   // premultiplied, ~additive on dark bg
+
+    // Follow the veil: concentrate the cloud around the wave centre-line (which curves
+    // along x and moves with the flow), not a fixed screen-centre band.
+    float veilUv = 0.5 - 0.5 * waveCenter(uv.x, time);   // clip-y -> y-down uv
+    float band = smoothstep(0.20, 0.0, abs(uv.y - veilUv));
+
+    // The opacity slider drives a non-linear brightness gain (0..1 -> 0..~3), boosted at
+    // the top end, so at maximum the sparkles stay bright and visible even over light
+    // presets (e.g. June) where additive white barely lifts a light background.
+    float op = pOpacity * (1.0 + 2.0 * pOpacity);
+    float a = clamp(spark * band * op, 0.0, 1.0);
+    fragColor = vec4(vec3(a), a) * qt_Opacity;
 }
