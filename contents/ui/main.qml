@@ -50,6 +50,28 @@ PlasmoidItem {
         snapDuration: Plasmoid.configuration.snapDuration
         magneticStrength: Plasmoid.configuration.magneticStrength
         hotZoneBandHeight: Plasmoid.configuration.hotZoneBandHeight
+
+        // XMB wave background (ps3xmbwave port)
+        waveFlowSpeed: Plasmoid.configuration.waveFlowSpeed
+        waveBandAmplitude: Plasmoid.configuration.waveBandAmplitude
+        waveHeightScale: Plasmoid.configuration.waveHeightScale
+        waveSoftClip: Plasmoid.configuration.waveSoftClip
+        waveTension: Plasmoid.configuration.waveTension
+        waveFresnelPower: Plasmoid.configuration.waveFresnelPower
+        waveFresnelScale: Plasmoid.configuration.waveFresnelScale
+        waveOpacity: Plasmoid.configuration.waveOpacity
+        waveBrightness: Plasmoid.configuration.waveBrightness
+        waveRowCount: Plasmoid.configuration.waveRowCount
+        waveColorR: Plasmoid.configuration.waveColorR
+        waveColorG: Plasmoid.configuration.waveColorG
+        waveColorB: Plasmoid.configuration.waveColorB
+        waveGradientTopMul: Plasmoid.configuration.waveGradientTopMul
+        waveGradientBotMul: Plasmoid.configuration.waveGradientBotMul
+        waveParticleCount: Plasmoid.configuration.waveParticleCount
+        waveParticleOpacity: Plasmoid.configuration.waveParticleOpacity
+        waveParticleSizeBase: Plasmoid.configuration.waveParticleSizeBase
+        waveParticleSizeVar: Plasmoid.configuration.waveParticleSizeVar
+        waveParticleFlowSpeed: Plasmoid.configuration.waveParticleFlowSpeed
     }
 
     // Global shortcut / standard activation path (keyboard, "activate" action).
