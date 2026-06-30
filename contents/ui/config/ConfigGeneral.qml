@@ -73,8 +73,52 @@ KCM.SimpleKCM {
         hiddenSet = arr
     }
 
-    // Per-section "reset to defaults" — each cfg_<key> has an auto-generated
-    // cfg_<key>Default from the config system.
+    // Per-section "reset to defaults".
+    //
+    // The config loader only injects properties the page actually DECLARES, so the
+    // cfg_<key>Default values are NOT auto-created just by referencing them — an
+    // undeclared cfg_<key>Default reads back as `undefined`, and assigning that to a
+    // slider/spinbox does nothing (which is why reset appeared to do nothing).
+    // We therefore declare each default explicitly, mirroring contents/config/main.xml.
+    // (Same approach already used for cfg_favoritesDefault in ConfigFavorites.qml.)
+    // Keep these in sync with main.xml.
+    property real cfg_backgroundOpacityDefault: 1.0
+    property int  cfg_categoryIconSizeDefault: 112
+    property int  cfg_appIconSizeDefault: 56
+    property real cfg_intersectionXFractionDefault: 0.30
+    property string cfg_panelIconDefault: "applications-all"
+
+    property real cfg_hotZoneFractionLeftDefault: 0.15
+    property real cfg_hotZoneFractionRightDefault: 0.45
+    property int  cfg_hotZoneBandHeightDefault: 360
+    property int  cfg_minScrollSpeedDefault: 1500
+    property int  cfg_maxScrollSpeedDefault: 2600
+    property int  cfg_snapDurationDefault: 220
+    property real cfg_magneticStrengthDefault: 0.7
+
+    property real cfg_waveFlowSpeedDefault: 0.45
+    property real cfg_waveBandAmplitudeDefault: 0.2
+    property real cfg_waveHeightScaleDefault: 0.5
+    property real cfg_waveSoftClipDefault: 0.22
+    property real cfg_waveTensionDefault: 0.12
+    property real cfg_waveFresnelPowerDefault: 4.0
+    property real cfg_waveFresnelScaleDefault: 0.5
+    property real cfg_waveOpacityDefault: 0.7
+    property real cfg_waveBrightnessDefault: 0.98
+    property int  cfg_waveRowCountDefault: 200
+
+    property int  cfg_waveColorMonthDefault: 13
+    property int  cfg_waveColorRDefault: 37
+    property int  cfg_waveColorGDefault: 89
+    property int  cfg_waveColorBDefault: 179
+    property real cfg_waveGradientTopMulDefault: 0.09
+    property real cfg_waveGradientBotMulDefault: 0.62
+
+    property bool cfg_waveParticlesEnabledDefault: true
+    property int  cfg_waveParticleCountDefault: 2000
+    property real cfg_waveParticleOpacityDefault: 1.0
+    property real cfg_waveParticleFlowSpeedDefault: 0.8
+
     function resetAppearance() {
         cfg_backgroundOpacity = cfg_backgroundOpacityDefault
         cfg_categoryIconSize = cfg_categoryIconSizeDefault
