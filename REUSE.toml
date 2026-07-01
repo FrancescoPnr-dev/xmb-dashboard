@@ -3,7 +3,7 @@ version = 1
 # Files that cannot carry an SPDX header comment (JSON, binaries, generated).
 
 [[annotations]]
-path = ["metadata.json", "README.md", ".gitignore"]
+path = ["metadata.json", "README.md", ".gitignore", "contents/icons/xmb-dashboard.svg"]
 SPDX-FileCopyrightText = "2026 Francesco Panarese"
 SPDX-License-Identifier = "GPL-3.0-only"
 
