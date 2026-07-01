@@ -1,6 +1,10 @@
+// SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
+//
 // XMB wave — vertex shader (Qt6 ShaderEffect + GridMesh).
 //
-// 1:1 translation of ps3xmbwave/spline.js `waveProg` VERTEX shader. The demo renders a
+// 1:1 translation of linkev/PlayStation-3-XMB spline.js `waveProg` VERTEX shader. The demo renders a
 // 100x100 grid (GL_TRIANGLE_STRIP) whose screen-Y is the wave displacement; here the
 // same grid is a Qt Quick GridMesh and this shader is the same per-vertex displacement.
 // This is the GPU-efficient method: the wave is computed per VERTEX (~10k), not per

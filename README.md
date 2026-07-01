@@ -54,11 +54,14 @@ categories. Each section has its own "reset to defaults".
 
 ## Credits & licence
 
-- Wave background ported from the [ps3xmbwave] WebGL demo.
+- The wave background is a Qt/QML port of **[PlayStation-3-XMB]** by Mart (linkev),
+  used under its MIT licence. That project in turn credits [Alphardex]'s CodePen
+  prototype and Sony's original XMB design.
 - All sounds are original synthesis (see `tools/`); no PlayStation audio is bundled.
 - App data comes from Plasma's own menu model (the same one Kickoff uses).
 
-Licensed under GPL-3.0-or-later. The wave-shader portions keep their original
-MIT licence and attribution.
+Licensed under **GPL-3.0** (see the `LICENSES/` folder). The ported wave shaders keep
+the required MIT attribution to the original author.
 
-[ps3xmbwave]: https://github.com/
+[PlayStation-3-XMB]: https://github.com/linkev/PlayStation-3-XMB
+[Alphardex]: https://codepen.io/alphardex/pen/poPZNwE

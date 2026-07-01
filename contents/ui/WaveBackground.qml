@@ -1,4 +1,8 @@
-// Native Qt6 port of the ps3xmbwave XMB demo. Three ShaderEffect layers drawn in
+// SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
+//
+// Native Qt6 port of linkev/PlayStation-3-XMB. Three ShaderEffect layers drawn in
 // order: gradient, wave mesh, particles. The wave is displaced per-vertex on a
 // GridMesh rather than per-pixel to keep the GPU cost down.
 import QtQuick

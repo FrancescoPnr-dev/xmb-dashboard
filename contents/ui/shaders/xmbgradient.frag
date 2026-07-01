@@ -1,6 +1,10 @@
+// SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
+//
 // XMB background gradient — fragment shader (fullscreen ShaderEffect).
 //
-// 1:1 translation of ps3xmbwave/spline.js `bgProg` fragment: a smoothstep gradient along
+// 1:1 translation of linkev/PlayStation-3-XMB spline.js `bgProg` fragment: a smoothstep gradient along
 // uDir between two colours over a [tMin, tMin+tSpan] range. Endpoints/dir/range are
 // computed CPU-side in QML (resolveBackgroundGradient). One cheap pass, no loops.
 

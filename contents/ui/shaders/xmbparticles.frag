@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
+//
 // XMB particles — fragment shader (fullscreen ShaderEffect, additive).
 //
 // Additive twinkling sparkle field that FOLLOWS the wave veil instead of sitting in a

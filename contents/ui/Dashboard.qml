@@ -25,7 +25,7 @@ Window {
     property int  hotZoneBandHeight: 200   // px band around the category row
     property bool manageScreenEdges: false
 
-    // XMB wave background (ps3xmbwave port); defaults mirror the demo settings.
+    // XMB wave background (port of linkev/PlayStation-3-XMB); defaults mirror the demo.
     property real waveFlowSpeed: 0.25
     property real waveBandAmplitude: 0.20
     property real waveHeightScale: 0.5
