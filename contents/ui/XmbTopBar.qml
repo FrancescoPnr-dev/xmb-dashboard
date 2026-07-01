@@ -1,15 +1,3 @@
-/*
- * XmbTopBar — top-edge reveal of the XMB system functions (text only, no background).
- *
- * Self-contained, independent of Plasma's system screen edges. A thin trigger strip at
- * the very top of the (fullscreen) dashboard reveals, top-LEFT, a minimal chevron `›`.
- * Clicking it expands the Power actions (org.kde.plasma.private.sessions) as a VERTICAL
- * list of plain-text labels (same light XMB styling as the clock); the dashboard blurs
- * behind them (driven by `powerExpanded`, like the search). Clicking again — or the bar
- * auto-hiding 1.5 s after the pointer leaves — collapses it. No icons, no panel.
- *
- * Anchor to fill the dashboard; transparent and non-interactive until revealed.
- */
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -23,17 +11,14 @@ Item {
     property bool revealed: false
     property bool powerExpanded: false
     property int labelSize: Math.max(16, Math.round(height * 0.021))
-    // true while the pointer is over the bar's interactive content (chevron/power/quick),
-    // used by the dashboard to blur the XMB and route the wheel to the quick settings.
+    // true while over interactive content; drives the XMB blur and wheel routing
     readonly property bool contentHovered: chevronHover.hovered || powerHover.hovered || quick.hovered
 
     onRevealedChanged: if (!revealed) powerExpanded = false
 
     Sessions.SessionManagement { id: session }
 
-    // Wheel routing for the quick settings — SAME approach as the search overlay: a
-    // WheelHandler on the FULLSCREEN bar root (above the XMB), enabled while a quick
-    // setting is hovered, so the wheel adjusts it and never reaches the app list below.
+    // Handler sits on the fullscreen root so the wheel adjusts the setting and never reaches the app list below
     WheelHandler {
         enabled: quick.hovered
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -48,11 +33,11 @@ Item {
     }
     Timer {
         id: hideTimer
-        interval: 1500   // hardcoded 1.5 s before autohide once the cursor leaves
+        interval: 1500   // autohide delay after the cursor leaves
         onTriggered: if (!root.stillHovered()) root.revealed = false
     }
 
-    // ---- minimal chevron, top-LEFT ----
+    // chevron, top-left
     Item {
         id: chevronBox
         anchors.top: parent.top
@@ -71,13 +56,13 @@ Item {
 
         Text {
             anchors.centerIn: parent
-            text: "›"   // ›
+            text: "›"
             color: "white"
             opacity: chevronHover.hovered || root.powerExpanded ? 1.0 : 0.78
             Behavior on opacity { NumberAnimation { duration: 120 } }
             font.pixelSize: Math.round(root.labelSize * 1.7)
             font.weight: Font.Light
-            rotation: root.powerExpanded ? 90 : 0    // › -> v when open
+            rotation: root.powerExpanded ? 90 : 0
             Behavior on rotation { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
             layer.enabled: true
             layer.effect: MultiEffect {
@@ -93,7 +78,7 @@ Item {
         }
     }
 
-    // ---- power actions: VERTICAL list under the chevron ----
+    // power actions
     ColumnLayout {
         id: powerCol
         anchors.top: chevronBox.bottom
@@ -151,7 +136,7 @@ Item {
         }
     }
 
-    // ---- centre: quick settings (brightness / volume / network) ----
+    // quick settings
     XmbQuickSettings {
         id: quick
         anchors.horizontalCenter: parent.horizontalCenter
@@ -164,10 +149,10 @@ Item {
         opacity: root.revealed ? 1.0 : 0.0
         Behavior on opacity { NumberAnimation { duration: 160 } }
         onCloseRequested: root.actionTriggered()
-        onHoveredChanged: root.maybeHide()   // re-arm autohide on enter/leave
+        onHoveredChanged: root.maybeHide()
     }
 
-    // ---- thin trigger strip pinned to the very top edge ----
+    // trigger strip pinned to the top edge
     Item {
         anchors.top: parent.top
         anchors.left: parent.left

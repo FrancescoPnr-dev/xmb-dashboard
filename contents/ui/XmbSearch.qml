@@ -1,14 +1,5 @@
-/*
- * XmbSearch — minimal type-to-search (KRunner) for the dashboard.
- *
- * Hidden until the user types a letter/digit; then a single query line appears at the TOP
- * (not centred) with text-only results, using the SAME Kirigami.Heading font as the
- * dashboard's category/app labels. Enter/click runs the selected result; Esc or emptying
- * the query (backspace) exits and returns focus to the dashboard. Backed by
- * org.kde.milou ResultsModel (KRunner).
- *
- * Anchor to fill the dashboard. Invisible and non-interactive until active.
- */
+// Type-to-search over KRunner (Milou) results, shown at the top of the dashboard.
+// Enter or middle-click runs the selection; Esc or emptying the query exits.
 import QtQuick
 import org.kde.kirigami as Kirigami
 import org.kde.milou as Milou
@@ -61,8 +52,8 @@ FocusScope {
         }
     }
 
-    // While searching, the wheel moves the SELECTION (kept centred, XMB-style) and is
-    // fully consumed here, so it never reaches the XMB's app column underneath.
+    // While searching, the wheel moves the selection and is consumed here so it never
+    // reaches the app column underneath.
     WheelHandler {
         enabled: search.active
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
@@ -114,8 +105,7 @@ FocusScope {
             interactive: false              // wheel/keys drive the selection, no drag-flick
             keyNavigationEnabled: false
 
-            // Current pinned near the TOP (just under the bar); the rest glide under it
-            // (XMB feel). Not centred on the screen.
+            // Selection pinned near the top; the rest glide under it (XMB feel).
             preferredHighlightBegin: 0
             preferredHighlightEnd: 0
             highlightRangeMode: ListView.StrictlyEnforceRange

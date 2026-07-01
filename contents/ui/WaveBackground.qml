@@ -1,34 +1,15 @@
-/*
- * WaveBackground
- * --------------
- * Native Qt6 port of the linkev/PlayStation-3-XMB `ps3xmbwave` demo (MIT), translated
- * 1:1 from the demo's own method (read from spline.js). THREE layers, drawn in order,
- * exactly like the demo:
- *
- *   1. Gradient  — fullscreen ShaderEffect, smoothstep gradient (spline.js bgProg).
- *   2. Wave      — a ShaderEffect over a GridMesh (the demo's 100x100 displaced grid):
- *                  xmbwave.vert displaces each VERTEX (spline.js waveProg vertex),
- *                  xmbwave.frag does the cross(dFdx,dFdy) fresnel (waveProg fragment).
- *                  This is the GPU-efficient method — the wave is computed per vertex
- *                  (~10k), NOT per screen pixel, so it no longer pins the GPU.
- *   3. Particles — fullscreen additive sparkles (cheap fixed 3x3 hash, not a loop).
- *
- * All wave parameters are uniforms with the demo's spline-settings.js defaults, so the
- * default appearance matches the demo. Dashboard binds the meaningful subset; if
- * ShaderEffect is unavailable Dashboard falls back to WaveBackgroundFallback.qml.
- */
+// Native Qt6 port of the ps3xmbwave XMB demo. Three ShaderEffect layers drawn in
+// order: gradient, wave mesh, particles. The wave is displaced per-vertex on a
+// GridMesh rather than per-pixel to keep the GPU cost down.
 import QtQuick
 
 Item {
     id: root
 
-    // real-seconds clock (demo dtSec accumulator)
     property real time: 0
     property bool animating: true
 
-    // ---- gradient ----
-    // colorMonth: 0 = Automatic (current month preset), 1..12 = forced month,
-    //             13 = Custom (the RGB sliders below, demo 'default' preset).
+    // colorMonth: 0 = Automatic (current month), 1..12 = forced month, 13 = Custom RGB.
     property int colorMonth: 0
     property real colorR: 37
     property real colorG: 89
@@ -36,8 +17,7 @@ Item {
     property real gradientTopMul: 0.09
     property real gradientBotMul: 0.62
 
-    // PS3 XMB monthly presets (background-gradients-day.js), 1:1:
-    // { angle: angleDeg, s: colorStart RGB, e: colorEnd RGB }.
+    // PS3 XMB monthly presets: { angle deg, s: start RGB, e: end RGB }.
     readonly property var monthPresets: ({
         1:  { angle: 90.25,  s: [197, 197, 197], e: [201, 201, 201] },
         2:  { angle: 67,     s: [203, 158, 13],  e: [219, 214, 41] },
@@ -53,13 +33,13 @@ Item {
         12: { angle: 170.5,  s: [236, 68, 45],   e: [214, 63, 43] }
     })
 
-    // Current month for Automatic mode, refreshed hourly so it stays correct over time.
+    // Refreshed hourly so Automatic mode stays correct if the app runs for days.
     property int _curMonth: (new Date()).getMonth() + 1
     Timer { interval: 3600000; running: true; repeat: true; onTriggered: root._curMonth = (new Date()).getMonth() + 1 }
 
-    // resolveBackgroundGradient(): start/end colours + direction + smoothstep range.
+    // Start/end colours plus direction and smoothstep range for the gradient shader.
     function _gradient() {
-        if (root.colorMonth === 13) {            // Custom (RGB sliders)
+        if (root.colorMonth === 13) {
             var cr = root.colorR / 255, cg = root.colorG / 255, cb = root.colorB / 255
             return {
                 start: Qt.vector4d(cr * root.gradientTopMul, cg * root.gradientTopMul, cb * root.gradientTopMul * 1.2, 1.0),
@@ -69,9 +49,9 @@ Item {
         }
         var mm = (root.colorMonth === 0) ? root._curMonth : root.colorMonth
         var p = root.monthPresets[mm]
-        var rad = p.angle * Math.PI / 180.0      // angleToDirYDown
+        var rad = p.angle * Math.PI / 180.0
         var dx = Math.cos(rad), dy = Math.sin(rad)
-        var lo = Math.min(0, dx, dy, dx + dy)    // computeDirRange (corner (0,0) = 0)
+        var lo = Math.min(0, dx, dy, dx + dy)
         var hi = Math.max(0, dx, dy, dx + dy)
         return {
             start: Qt.vector4d(p.s[0] / 255, p.s[1] / 255, p.s[2] / 255, 1.0),
@@ -86,7 +66,7 @@ Item {
     readonly property real tMin: gradientSpec.tMin
     readonly property real tSpan: gradientSpec.tSpan
 
-    // ---- wave dynamics (spline-settings.js defaults) ----
+    // Wave dynamics; defaults match the demo's spline settings.
     property real flowSpeed: 0.18
     property real timeStep: 1.0
     property real rePipelineBlend: 0.45
@@ -113,19 +93,17 @@ Item {
     property real ffdZAmp: 0.06
     property real zDetailScale: 0.08
 
-    // ---- wave shading (spline-settings.js defaults) ----
     property real fresnelPower: 4.0
     property real fresnelScale: 0.5
     property real waveOpacity: 0.7
     property real brightness: 0.98
-    property int  rowCount: 200        // GridMesh depth rows
+    property int  rowCount: 200
 
-    // ---- particles ----
     property bool particlesEnabled: true
     property real pFlowSpeed: 0.8
     property real pOpacity: 0.9
-    property real pSizeBase: 1.0     // fixed standard (no longer user-adjustable)
-    property real pSizeVar: 1.5      // fixed standard (no longer user-adjustable)
+    property real pSizeBase: 1.0
+    property real pSizeVar: 1.5
     property real pDensity: 1.0
 
     FrameAnimation {
@@ -133,7 +111,7 @@ Item {
         onTriggered: root.time += frameTime
     }
 
-    // ---- LAYER 1: background gradient ----
+    // Layer 1: background gradient.
     ShaderEffect {
         anchors.fill: parent
         blending: false
@@ -145,7 +123,7 @@ Item {
         property vector4d gdir: root.gdir
     }
 
-    // ---- LAYER 2: the displaced wave mesh ----
+    // Layer 2: the displaced wave mesh.
     ShaderEffect {
         anchors.fill: parent
         blending: true
@@ -154,8 +132,7 @@ Item {
         vertexShader: "shaders/xmbwave.vert.qsb"
         fragmentShader: "shaders/xmbwave.frag.qsb"
 
-        // MSAA: render the mesh into a multisampled offscreen buffer so the filament
-        // (triangle/fold) edges are antialiased instead of stair-stepped.
+        // Render into a 4x MSAA layer so the fold edges aren't stair-stepped.
         layer.enabled: true
         layer.samples: 4
         layer.smooth: true
@@ -192,10 +169,10 @@ Item {
         property real brightness: root.brightness
     }
 
-    // ---- LAYER 3: additive sparkles ----
+    // Layer 3: additive sparkles.
     ShaderEffect {
         anchors.fill: parent
-        visible: root.particlesEnabled        // particles on/off
+        visible: root.particlesEnabled
         blending: true
         fragmentShader: "shaders/xmbparticles.frag.qsb"
         property real time: root.time
@@ -204,7 +181,7 @@ Item {
         property real pSizeBase: root.pSizeBase
         property real pSizeVar: root.pSizeVar
         property real pDensity: root.pDensity
-        // wave centre-line (so sparkles follow the veil) — shared with the wave shader
+        // Wave centre-line params, shared so sparkles follow the veil.
         property real flowSpeed: root.flowSpeed
         property real timeStep: root.timeStep
         property real rePipelineBlend: root.rePipelineBlend

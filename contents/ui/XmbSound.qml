@@ -1,13 +1,6 @@
-/*
- * XmbSound
- * --------
- * Tiny one-shot sound player for UI feedback (the navigation tick).
- *
- * Two engines, picked by file type: WAV goes through SoundEffect (low latency, clean
- * rapid retrigger — ideal for the tick), anything else (e.g. an mp3) through
- * MediaPlayer. `play()` restarts from the start each time, so holding a direction
- * ticks per step. `source` empty = silent (the "off" mode).
- */
+// One-shot sound player for UI feedback (the navigation tick).
+// WAV goes through SoundEffect (low latency, clean retrigger); anything else via
+// MediaPlayer. play() restarts from the start; empty source = silent.
 import QtQuick
 import QtMultimedia
 

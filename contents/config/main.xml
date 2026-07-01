@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-    KConfigXT schema. Every <entry> here becomes available in QML as
-    Plasmoid.configuration.<name> (read/write, auto-persisted).
--->
+<!-- KConfigXT schema: each <entry> is available in QML as Plasmoid.configuration.<name>. -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
@@ -41,9 +38,7 @@
             <default></default>
         </entry>
 
-        <!-- Ordered list of favourite application IDs, backing the "Favourites" category.
-             Read/written by the kicker favourites model (KAStatsFavoritesModel), shared
-             with kactivitymanagerd — same mechanism Kickoff uses. -->
+        <!-- Favourite app IDs, via the kicker favourites model — same as Kickoff. -->
         <entry name="favorites" type="StringList">
             <default></default>
         </entry>
@@ -80,23 +75,18 @@
             <default>0.7</default>
         </entry>
 
-        <!-- Height (px) of the vertical band, centred on the category row, within
-             which the left/right hot zones are active. Outside it (where the app
-             column lives) approaching the edges does not scroll categories. -->
+        <!-- Height (px) of the band around the category row where the edge hot zones are active. -->
         <entry name="hotZoneBandHeight" type="Int">
             <default>200</default>
         </entry>
 
-        <!-- Temporarily disable Plasma's screen-EDGE actions (switch-desktop-on-edge)
-             while the dashboard is open, restoring them on close. Reversible; touches
-             only kwinrc [Windows] ElectricBorders. -->
+        <!-- Disable Plasma's screen-edge actions while the dashboard is open (restored on close). -->
         <entry name="manageScreenEdges" type="Bool">
             <default>false</default>
         </entry>
 
-        <!-- ===== XMB wave background (Qt6 ShaderEffect port of the linkev
-             ps3xmbwave demo). Defaults mirror the demo's spline-settings.js /
-             particles-settings.js so the default look matches the demo. ===== -->
+        <!-- XMB wave background (ShaderEffect port of the ps3xmbwave demo); defaults
+             mirror the demo. -->
 
         <!-- Wave -->
         <entry name="waveFlowSpeed" type="Double"><default>0.45</default></entry>
@@ -110,10 +100,8 @@
         <entry name="waveBrightness" type="Double"><default>0.98</default></entry>
         <entry name="waveRowCount" type="Int"><default>200</default></entry>
 
-        <!-- Gradient / colour. waveColorMonth: 0 = Automatic (current month's PS3
-             preset), 1..12 = forced month preset, 13 = Custom (RGB sliders below).
-             Default is Custom for now (the monthly presets are not yet ready to ship as
-             the default); the custom RGB below is the classic PS3 blue. -->
+        <!-- waveColorMonth: 0 = Automatic (current month), 1..12 = forced month, 13 =
+             Custom (RGB below). Defaults to Custom PS3 blue. -->
         <entry name="waveColorMonth" type="Int"><default>13</default></entry>
         <entry name="waveColorR" type="Int"><default>37</default></entry>
         <entry name="waveColorG" type="Int"><default>89</default></entry>
@@ -127,16 +115,13 @@
         <entry name="waveParticleOpacity" type="Double"><default>1.0</default></entry>
         <entry name="waveParticleFlowSpeed" type="Double"><default>0.8</default></entry>
 
-        <!-- ===== Navigation sound ===== -->
-        <!-- navSoundMode: 0 = bundled XMB-style tick, 1 = custom file (navSoundFile),
-             2 = off. The original PS3 sound is NOT shipped (Sony copyright); point the
-             custom file at your own local copy to use it. -->
+        <!-- navSoundMode: 0 = bundled tick, 1 = custom file (navSoundFile), 2 = off.
+             The PS3 sound is not shipped; point the custom file at your own copy. -->
         <entry name="navSoundMode" type="Int"><default>0</default></entry>
         <entry name="navSoundFile" type="String"><default></default></entry>
         <entry name="navSoundVolume" type="Double"><default>0.5</default></entry>
 
-        <!-- Looping ambient pad played softly under the dashboard, fading in on open
-             and out on close. Bundled original (not the Sony startup track). -->
+        <!-- Looping ambient pad under the dashboard, fading in/out. Original, not Sony. -->
         <entry name="ambientSoundEnabled" type="Bool"><default>true</default></entry>
         <entry name="ambientSoundVolume" type="Double"><default>0.5</default></entry>
     </group>

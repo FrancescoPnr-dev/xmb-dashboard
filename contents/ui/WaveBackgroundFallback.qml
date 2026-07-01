@@ -1,12 +1,5 @@
-/*
- * WaveBackgroundFallback
- * ----------------------
- * Shown when ShaderEffect is unavailable (e.g. the Qt Quick software backend, where
- * custom shaders don't run). A static deep-blue vertical gradient matching the demo's
- * default background — so the dashboard always opens. Exposes the SAME property set as
- * WaveBackground.qml so Dashboard can bind either without special-casing (the wave-only
- * properties are simply unused here).
- */
+// Static gradient used when ShaderEffect is unavailable (e.g. the software backend).
+// Mirrors WaveBackground's property set so Dashboard can bind either one.
 import QtQuick
 
 Item {
@@ -14,14 +7,13 @@ Item {
 
     property bool animating: true
 
-    // gradient (demo 'default' preset, resolveBackgroundGradient)
     property real colorR: 37
     property real colorG: 89
     property real colorB: 179
     property real gradientTopMul: 0.09
     property real gradientBotMul: 0.62
 
-    // wave/particle uniforms (unused in the fallback, declared so bindings succeed)
+    // Wave/particle uniforms are unused here but declared so bindings still resolve.
     property real flowSpeed: 0.18
     property real bandAmplitude: 0.200
     property real waveHeightScale: 0.5
@@ -41,7 +33,6 @@ Item {
     Rectangle {
         anchors.fill: parent
         gradient: Gradient {
-            // top = colorRGB*topMul (B*1.2), bottom = colorRGB*botMul  (demo default)
             GradientStop {
                 position: 0.0
                 color: Qt.rgba((root.colorR / 255) * root.gradientTopMul,
