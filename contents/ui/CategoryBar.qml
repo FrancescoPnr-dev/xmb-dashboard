@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // Horizontal arm of the XMB cross. One source of truth: `position`, a fractional index.
 // No ListView/Flickable on purpose — it's a plain strip translated by `position`, so
 // there's no inertial momentum to overshoot the ends; position is clamped and integrated

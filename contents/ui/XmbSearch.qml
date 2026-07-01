@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // Type-to-search over KRunner (Milou) results, shown at the top of the dashboard.
 // Enter or middle-click runs the selection; Esc or emptying the query exits.
 import QtQuick

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // KWin has no per-window edge API, so we toggle the global ElectricBorders
 // setting while the dashboard is open and restore the user's real value on close.
 import QtQuick

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // Vertical arm of the XMB cross: the current app is pinned at the intersection and the
 // list glides up/down around it. Changing category swaps the whole model, resets to the
 // top and cross-fades. `model` is a kicker AbstractModel with display/decoration roles

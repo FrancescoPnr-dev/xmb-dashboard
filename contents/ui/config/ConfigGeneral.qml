@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // "General" settings page. Each control writes to cfg_<key>, mapped to main.xml.
 import QtQuick
 import QtQuick.Layouts
