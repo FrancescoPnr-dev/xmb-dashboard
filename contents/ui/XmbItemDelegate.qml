@@ -105,6 +105,7 @@ Item {
 
     // ---- app layout: icon on the left, label to the right ----
     Row {
+        id: appRow
         visible: !delegate.labelBelow
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
@@ -143,9 +144,15 @@ Item {
     }
 
     MouseArea {
-        anchors.fill: parent
-        // Always present so a click is swallowed here (e.g. category clicks do not
-        // fall through and close the dashboard), but the hover cursor and the
+        // App style: cover only the icon+label content, so the hand cursor / click area
+        // matches the app instead of the whole (480 px) column width. Category style:
+        // fill the whole cell, so stray category-bar clicks are swallowed here (they do
+        // not fall through and close the dashboard).
+        anchors.left: parent.left
+        anchors.verticalCenter: parent.verticalCenter
+        width: delegate.labelBelow ? delegate.width : appRow.width
+        height: delegate.labelBelow ? delegate.height : appRow.height
+        // Always present so a click is swallowed here, but the hover cursor and the
         // click action only apply when the delegate is interactive.
         hoverEnabled: delegate.interactive
         cursorShape: delegate.interactive ? Qt.PointingHandCursor : Qt.ArrowCursor

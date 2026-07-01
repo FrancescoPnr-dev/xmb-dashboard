@@ -57,7 +57,7 @@
 
         <!-- Width of the RIGHT edge hot zone, as a fraction of screen width. -->
         <entry name="hotZoneFractionRight" type="Double">
-            <default>0.45</default>
+            <default>0.15</default>
         </entry>
 
         <!-- Scroll speed (px/sec) just inside the hot-zone threshold (fine control). -->
@@ -84,7 +84,7 @@
              which the left/right hot zones are active. Outside it (where the app
              column lives) approaching the edges does not scroll categories. -->
         <entry name="hotZoneBandHeight" type="Int">
-            <default>360</default>
+            <default>200</default>
         </entry>
 
         <!-- Temporarily disable Plasma's screen-EDGE actions (switch-desktop-on-edge)
