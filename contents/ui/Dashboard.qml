@@ -164,6 +164,22 @@ Window {
         }
     }
 
+    // React to the setting being toggled while the dashboard is already open:
+    // onVisibleChanged only fires on open/close, so without this the loop would
+    // keep playing until the next close.
+    onAmbientSoundEnabledChanged: {
+        if (!visible)
+            return
+        if (ambientSoundEnabled) {
+            ambientStopTimer.stop()
+            ambientLoop.play()
+            ambientLevel = 1.0
+        } else {
+            ambientLevel = 0.0
+            ambientStopTimer.restart()
+        }
+    }
+
     onActiveChanged: {
         if (active) {
             everActive = true
@@ -539,7 +555,7 @@ Window {
         id: ambientLoop
         source: Qt.resolvedUrl("../sounds/ambient-loop.wav")
         loops: SoundEffect.Infinite
-        volume: dashboard.ambientLevel * dashboard.ambientSoundVolume
+        volume: (dashboard.ambientSoundEnabled ? 1 : 0) * dashboard.ambientLevel * dashboard.ambientSoundVolume
     }
     // Stop the loop once it has faded out, so it isn't running while closed.
     Timer {
