@@ -85,6 +85,13 @@ Item {
         : minScrollSpeed + (maxScrollSpeed - minScrollSpeed) * Math.pow(depth, speedCurveExponent)
 
     readonly property bool scrolling: scrollDirection !== 0 && count > 1
+
+    // While scrolling via the mouse hot zones, commit each category the instant it
+    // becomes current (as the keyboard does), so the app column loads its icons live
+    // instead of waiting for the settle/snap. Gated on `scrolling` so it never fires
+    // during keyboard/click glides (those commit through selectIndex).
+    onCurrentIndexChanged: if (scrolling) committed(currentIndex)
+
     onScrollingChanged: {
         if (scrolling)
             glide.stop()            // hand control to the frame driver
