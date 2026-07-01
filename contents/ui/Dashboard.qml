@@ -64,7 +64,7 @@ Window {
     // navSoundMode: 0 = bundled XMB-style tick, 1 = custom file, 2 = off.
     property int  navSoundMode: 0
     property string navSoundFile: ""
-    property real navSoundVolume: 0.6
+    property real navSoundVolume: 0.5
     // Resolve the active tick source. The original PS3 sound is never bundled; mode 1
     // loads whatever local file the user points at (their own copy).
     readonly property url navSoundSource:
@@ -77,7 +77,7 @@ Window {
 
     // Looping background ambience, faded in on open / out on close.
     property bool ambientSoundEnabled: true
-    property real ambientSoundVolume: 0.35
+    property real ambientSoundVolume: 0.5
     // Fade level (0..1), animated; multiplied by the configured volume.
     property real ambientLevel: 0.0
     Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
