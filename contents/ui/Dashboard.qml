@@ -34,7 +34,7 @@ Window {
     property int  maxScrollSpeed: 2600
     property int  snapDuration: 220
     property real magneticStrength: 0.7
-    property int  hotZoneBandHeight: 360   // px band around the category row (BUG3)
+    property int  hotZoneBandHeight: 200   // px band around the category row (BUG3)
     property bool manageScreenEdges: false  // disable system screen edges while open
 
     // --- XMB wave background (ps3xmbwave port), injected from Plasmoid.configuration.
@@ -412,6 +412,15 @@ Window {
         MouseArea {
             anchors.fill: parent
             onClicked: dashboard.close()
+        }
+
+        // Middle (wheel) click anywhere launches the highlighted app — not only when
+        // hovering the app itself. A TapHandler (not a MouseArea) so it never overrides
+        // the hover cursor and never steals left/right clicks from the items below.
+        TapHandler {
+            acceptedButtons: Qt.MiddleButton
+            enabled: !searchOverlay.active
+            onTapped: appColumn.launchCurrent()
         }
 
         // Tracks the cursor across the whole overlay and feeds it to the category

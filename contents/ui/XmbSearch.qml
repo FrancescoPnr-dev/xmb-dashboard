@@ -49,11 +49,16 @@ FocusScope {
     // same font as the dashboard labels (category = level 3, app = level 4)
     Kirigami.Heading { id: queryFont; level: 3; visible: false }
 
-    // click outside the query/results dismisses the search (not the dashboard)
+    // Left click outside the query/results dismisses the search (not the dashboard).
+    // Middle (wheel) click anywhere runs the highlighted result.
     MouseArea {
         anchors.fill: parent
         enabled: search.active
-        onClicked: search.stop()
+        acceptedButtons: Qt.LeftButton | Qt.MiddleButton
+        onClicked: (mouse) => {
+            if (mouse.button === Qt.MiddleButton) search.runCurrent()
+            else search.stop()
+        }
     }
 
     // While searching, the wheel moves the SELECTION (kept centred, XMB-style) and is

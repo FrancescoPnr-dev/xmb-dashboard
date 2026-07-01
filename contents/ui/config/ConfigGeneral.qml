@@ -96,8 +96,8 @@ KCM.SimpleKCM {
     property string cfg_panelIconDefault: "applications-all"
 
     property real cfg_hotZoneFractionLeftDefault: 0.15
-    property real cfg_hotZoneFractionRightDefault: 0.45
-    property int  cfg_hotZoneBandHeightDefault: 360
+    property real cfg_hotZoneFractionRightDefault: 0.15
+    property int  cfg_hotZoneBandHeightDefault: 200
     property int  cfg_minScrollSpeedDefault: 1500
     property int  cfg_maxScrollSpeedDefault: 2600
     property int  cfg_snapDurationDefault: 220
