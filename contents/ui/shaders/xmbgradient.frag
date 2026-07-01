@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
 // SPDX-FileCopyrightText: 2026 Francesco Panarese
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-only AND MIT
 //
 // XMB background gradient — fragment shader (fullscreen ShaderEffect).
 //
