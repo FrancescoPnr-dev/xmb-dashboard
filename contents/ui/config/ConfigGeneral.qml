@@ -128,9 +128,9 @@ KCM.SimpleKCM {
 
     property int    cfg_navSoundModeDefault: 0
     property string cfg_navSoundFileDefault: ""
-    property real   cfg_navSoundVolumeDefault: 0.6
+    property real   cfg_navSoundVolumeDefault: 0.5
     property bool   cfg_ambientSoundEnabledDefault: true
-    property real   cfg_ambientSoundVolumeDefault: 0.35
+    property real   cfg_ambientSoundVolumeDefault: 0.5
 
     function resetAppearance() {
         cfg_backgroundOpacity = cfg_backgroundOpacityDefault
@@ -196,7 +196,7 @@ KCM.SimpleKCM {
             QQC2.Slider {
                 id: opacitySlider
                 from: 0.2; to: 1.0; stepSize: 0.05
-                Layout.fillWidth: true
+                Layout.preferredWidth: page.controlWidth
             }
             QQC2.Label {
                 text: Math.round(opacitySlider.value * 100) + "%"
@@ -222,7 +222,7 @@ KCM.SimpleKCM {
             QQC2.Slider {
                 id: intersectionSlider
                 from: 0.1; to: 0.5; stepSize: 0.01
-                Layout.fillWidth: true
+                Layout.preferredWidth: page.controlWidth
             }
             QQC2.Label {
                 text: Math.round(intersectionSlider.value * 100) + "%"
@@ -234,7 +234,7 @@ KCM.SimpleKCM {
         QQC2.TextField {
             id: iconField
             Kirigami.FormData.label: i18n("Panel icon name:")
-            Layout.fillWidth: true
+            Layout.preferredWidth: page.controlWidth
         }
 
         QQC2.Button {
@@ -266,7 +266,7 @@ KCM.SimpleKCM {
             QQC2.Slider {
                 id: hotZoneLeftSlider
                 from: 0.05; to: 0.45; stepSize: 0.01
-                Layout.fillWidth: true
+                Layout.preferredWidth: page.controlWidth
             }
             QQC2.Label {
                 text: Math.round(hotZoneLeftSlider.value * 100) + "%"
@@ -280,7 +280,7 @@ KCM.SimpleKCM {
             QQC2.Slider {
                 id: hotZoneRightSlider
                 from: 0.05; to: 0.45; stepSize: 0.01
-                Layout.fillWidth: true
+                Layout.preferredWidth: page.controlWidth
             }
             QQC2.Label {
                 text: Math.round(hotZoneRightSlider.value * 100) + "%"
@@ -326,7 +326,7 @@ KCM.SimpleKCM {
             QQC2.Slider {
                 id: magneticSlider
                 from: 0.0; to: 0.95; stepSize: 0.05
-                Layout.fillWidth: true
+                Layout.preferredWidth: page.controlWidth
             }
             QQC2.Label {
                 text: Math.round(magneticSlider.value * 100) + "%"
@@ -352,47 +352,47 @@ KCM.SimpleKCM {
 
         RowLayout {
             Kirigami.FormData.label: i18n("Flow speed:")
-            QQC2.Slider { id: waveFlowSpeedSlider; from: 0.0; to: 1.2; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveFlowSpeedSlider; from: 0.0; to: 1.2; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveFlowSpeedSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Band amplitude:")
-            QQC2.Slider { id: waveBandAmpSlider; from: 0.0; to: 0.6; stepSize: 0.002; Layout.fillWidth: true }
+            QQC2.Slider { id: waveBandAmpSlider; from: 0.0; to: 0.6; stepSize: 0.002; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveBandAmpSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Wave height:")
-            QQC2.Slider { id: waveHeightScaleSlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveHeightScaleSlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveHeightScaleSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Soft clip:")
-            QQC2.Slider { id: waveSoftClipSlider; from: 0.05; to: 0.5; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveSoftClipSlider; from: 0.05; to: 0.5; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveSoftClipSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Tension:")
-            QQC2.Slider { id: waveTensionSlider; from: 0.0; to: 0.5; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveTensionSlider; from: 0.0; to: 0.5; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveTensionSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Fresnel power:")
-            QQC2.Slider { id: waveFresnelPowerSlider; from: 0.2; to: 8.0; stepSize: 0.05; Layout.fillWidth: true }
+            QQC2.Slider { id: waveFresnelPowerSlider; from: 0.2; to: 8.0; stepSize: 0.05; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveFresnelPowerSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Fresnel scale:")
-            QQC2.Slider { id: waveFresnelScaleSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: waveFresnelScaleSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveFresnelScaleSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Wave opacity:")
-            QQC2.Slider { id: waveOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveOpacitySlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Brightness:")
-            QQC2.Slider { id: waveBrightnessSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: waveBrightnessSlider; from: 0.0; to: 2.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveBrightnessSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         QQC2.SpinBox {
@@ -428,31 +428,31 @@ KCM.SimpleKCM {
         RowLayout {
             Kirigami.FormData.label: i18n("Colour R:")
             enabled: monthCombo.currentIndex === 13
-            QQC2.Slider { id: waveColorRSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Slider { id: waveColorRSlider; from: 0; to: 255; stepSize: 1; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: Math.round(waveColorRSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Colour G:")
             enabled: monthCombo.currentIndex === 13
-            QQC2.Slider { id: waveColorGSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Slider { id: waveColorGSlider; from: 0; to: 255; stepSize: 1; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: Math.round(waveColorGSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Colour B:")
             enabled: monthCombo.currentIndex === 13
-            QQC2.Slider { id: waveColorBSlider; from: 0; to: 255; stepSize: 1; Layout.fillWidth: true }
+            QQC2.Slider { id: waveColorBSlider; from: 0; to: 255; stepSize: 1; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: Math.round(waveColorBSlider.value); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Gradient top mul:")
             enabled: monthCombo.currentIndex === 13
-            QQC2.Slider { id: waveTopMulSlider; from: 0.0; to: 0.3; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveTopMulSlider; from: 0.0; to: 0.3; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveTopMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Gradient bottom mul:")
             enabled: monthCombo.currentIndex === 13
-            QQC2.Slider { id: waveBotMulSlider; from: 0.2; to: 1.2; stepSize: 0.005; Layout.fillWidth: true }
+            QQC2.Slider { id: waveBotMulSlider; from: 0.2; to: 1.2; stepSize: 0.005; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveBotMulSlider.value.toFixed(3); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
@@ -483,13 +483,13 @@ KCM.SimpleKCM {
         RowLayout {
             Kirigami.FormData.label: i18n("Opacity:")
             enabled: particlesEnabledCheck.checked
-            QQC2.Slider { id: waveParticleOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: waveParticleOpacitySlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveParticleOpacitySlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Flow speed:")
             enabled: particlesEnabledCheck.checked
-            QQC2.Slider { id: waveParticleFlowSpeedSlider; from: 0.0; to: 3.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: waveParticleFlowSpeedSlider; from: 0.0; to: 3.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: waveParticleFlowSpeedSlider.value.toFixed(2); Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
@@ -515,12 +515,12 @@ KCM.SimpleKCM {
         QQC2.TextField {
             id: navSoundFileField
             Kirigami.FormData.label: i18n("Custom sound file:")
-            Layout.fillWidth: true
+            Layout.preferredWidth: page.controlWidth
             enabled: navSoundCombo.currentIndex === 1
             placeholderText: i18n("/path/to/sound.wav or .mp3")
         }
         QQC2.Label {
-            Layout.fillWidth: true
+            Layout.preferredWidth: page.controlWidth
             visible: navSoundCombo.currentIndex === 1
             wrapMode: Text.WordWrap
             opacity: 0.7
@@ -530,7 +530,7 @@ KCM.SimpleKCM {
         RowLayout {
             Kirigami.FormData.label: i18n("Volume:")
             enabled: navSoundCombo.currentIndex !== 2
-            QQC2.Slider { id: navSoundVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: navSoundVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: Math.round(navSoundVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
@@ -542,7 +542,7 @@ KCM.SimpleKCM {
         RowLayout {
             Kirigami.FormData.label: i18n("Ambience volume:")
             enabled: ambientEnabledCheck.checked
-            QQC2.Slider { id: ambientVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.fillWidth: true }
+            QQC2.Slider { id: ambientVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
             QQC2.Label { text: Math.round(ambientVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
@@ -597,4 +597,9 @@ KCM.SimpleKCM {
 
     // Shared width for the slider value readouts so they line up in a neat column.
     readonly property int valueColumnWidth: Kirigami.Units.gridUnit * 2.5
+
+    // Fixed width for the field controls (sliders, text fields). Using a bounded width
+    // instead of Layout.fillWidth keeps the FormLayout's two-column block centred like
+    // a standard KDE settings page, rather than stretching the controls edge to edge.
+    readonly property int controlWidth: Kirigami.Units.gridUnit * 14
 }
