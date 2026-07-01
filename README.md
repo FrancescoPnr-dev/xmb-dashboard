@@ -60,8 +60,7 @@ categories. Each section has its own "reset to defaults".
 - All sounds are original synthesis (see `tools/`); no PlayStation audio is bundled.
 - App data comes from Plasma's own menu model (the same one Kickoff uses).
 
-Licensed under **GPL-3.0** (see the `LICENSES/` folder). The ported wave shaders keep
-the required MIT attribution to the original author.
+All the repo is licensed under **GPL-3.0** (see the `LICENSES/` folder). 
 
 [PlayStation-3-XMB]: https://github.com/linkev/PlayStation-3-XMB
 [Alphardex]: https://codepen.io/alphardex/pen/poPZNwE
