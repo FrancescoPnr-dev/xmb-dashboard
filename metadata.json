@@ -7,13 +7,19 @@
         "FormFactors": [
             "desktop"
         ],
+        "Authors": [
+            {
+                "Name": "Francesco Panarese",
+                "Email": "FrancescoPnr-dev@proton.me"
+            }
+        ],
         "Icon": "applications-all",
         "Id": "org.kde.plasma.xmbdashboard",
-        "License": "GPL-3.0-or-later",
+        "License": "GPL-3.0-only",
         "Name": "XMB Dashboard",
         "Name[it]": "Cruscotto XMB",
         "Version": "0.1.0",
-        "Website": "https://kde.org"
+        "Website": "https://github.com/Francesco-1-7/xmb-dashboard"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-Provides": [

@@ -38,7 +38,7 @@ PlasmoidItem {
         hotZoneBandHeight: Plasmoid.configuration.hotZoneBandHeight
         manageScreenEdges: Plasmoid.configuration.manageScreenEdges
 
-        // XMB wave background (ps3xmbwave port)
+        // XMB wave background (port of linkev/PlayStation-3-XMB)
         waveFlowSpeed: Plasmoid.configuration.waveFlowSpeed
         waveBandAmplitude: Plasmoid.configuration.waveBandAmplitude
         waveHeightScale: Plasmoid.configuration.waveHeightScale

@@ -85,7 +85,7 @@
             <default>false</default>
         </entry>
 
-        <!-- XMB wave background (ShaderEffect port of the ps3xmbwave demo); defaults
+        <!-- XMB wave background (ShaderEffect port of linkev/PlayStation-3-XMB); defaults
              mirror the demo. -->
 
         <!-- Wave -->

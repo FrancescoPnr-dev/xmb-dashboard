@@ -1,6 +1,10 @@
+// SPDX-FileCopyrightText: 2025 Mart (https://github.com/linkev/PlayStation-3-XMB, MIT)
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
+//
 // XMB wave — fragment shader (Qt6 ShaderEffect + GridMesh).
 //
-// 1:1 translation of ps3xmbwave/spline.js `waveProg` FRAGMENT shader: reconstruct the
+// 1:1 translation of linkev/PlayStation-3-XMB spline.js `waveProg` FRAGMENT shader: reconstruct the
 // surface normal from the screen-space derivatives of the displaced position and take a
 // fresnel term, so the translucent silver sheet lights up along its grazing folds. Output
 // is premultiplied white * alpha (Qt composites premultiplied; equivalent to the demo's
