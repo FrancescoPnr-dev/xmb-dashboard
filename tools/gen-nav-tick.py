@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 Francesco Panarese
+# SPDX-License-Identifier: GPL-3.0-only
 """
 Generator for the navigation click (contents/sounds/nav-tick.wav).
 

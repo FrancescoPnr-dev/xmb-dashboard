@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // One-shot sound player for UI feedback (the navigation tick).
 // WAV goes through SoundEffect (low latency, clean retrigger); anything else via
 // MediaPlayer. play() restarts from the start; empty source = silent.

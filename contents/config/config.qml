@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 /*
  * Declares the pages shown in the widget's configuration dialog.
  * Each ConfigCategory points at a QML file under contents/ui/config/.

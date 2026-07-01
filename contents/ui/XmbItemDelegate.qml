@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 Francesco Panarese
+// SPDX-License-Identifier: GPL-3.0-only
 // Icon + label cell shared by the category bar and the app column. It owns the XMB
 // focus emphasis (selected item big and opaque, neighbours shrink and fade), animated
 // here so both views feel the same. The view only sets `selected` and `neighbourDistance`.
