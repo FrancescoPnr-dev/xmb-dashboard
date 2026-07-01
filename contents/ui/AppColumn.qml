@@ -86,7 +86,13 @@ Item {
         spacing: column.listSpacing
         currentIndex: 0
         keyNavigationEnabled: false
-        interactive: !column.wheelLocked
+        // Non-interactive on purpose: an interactive ListView would consume the wheel
+        // with its own inertial flick, so a fast scroll overshoots by several apps and
+        // StrictlyEnforceRange snaps to an imprecise landing. Instead the wheel is driven
+        // step-by-step by Dashboard's WheelHandler (one app per notch). Same reasoning as
+        // CategoryBar, which deliberately avoids any Flickable. wheelLocked is handled by
+        // that WheelHandler's `enabled` gate.
+        interactive: false
 
         // Pin the current app to the intersection; glide the rest around it.
         preferredHighlightBegin: column.intersectionY - column.cellHeight / 2

@@ -512,9 +512,16 @@ Window {
         WheelHandler {
             enabled: !searchOverlay.active && !topBar.contentHovered
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
+            // Accumulate the vertical delta and step one app per full notch (120), so a
+            // fast spin moves exactly as many apps as notches and hi-res/touchpad deltas
+            // don't lose or over-count steps. Reset on direction change for snappy reversal.
+            property real accumY: 0
             onWheel: (event) => {
-                if (event.angleDelta.y < 0)       appColumn.down()
-                else if (event.angleDelta.y > 0)  appColumn.up()
+                if ((accumY > 0) !== (event.angleDelta.y > 0))
+                    accumY = 0
+                accumY += event.angleDelta.y
+                while (accumY <= -120) { appColumn.down(); accumY += 120 }
+                while (accumY >=  120) { appColumn.up();   accumY -= 120 }
                 if (event.angleDelta.x < 0)       categoryBar.goNext()
                 else if (event.angleDelta.x > 0)  categoryBar.goPrev()
             }
