@@ -1,11 +1,4 @@
-/*
- * ConfigGeneral.qml — the "General" page of the widget settings.
- *
- * Root is KCM.SimpleKCM (the canonical Plasma 6 config-page wrapper): it provides
- * scrolling and correct page margins, so the form never gets clipped or runs into
- * the dialog borders. Every control writes to cfg_<key>, which the config system
- * maps to the matching <entry> in contents/config/main.xml.
- */
+// "General" settings page. Each control writes to cfg_<key>, mapped to main.xml.
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
@@ -16,7 +9,6 @@ import org.kde.plasma.private.kicker as Kicker
 KCM.SimpleKCM {
     id: page
 
-    // These aliases are the contract with the config system (cfg_<key>).
     property alias cfg_backgroundOpacity: opacitySlider.value
     property alias cfg_categoryIconSize: categorySizeSpin.value
     property alias cfg_appIconSize: appSizeSpin.value
@@ -31,7 +23,7 @@ KCM.SimpleKCM {
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
     property alias cfg_manageScreenEdges: manageScreenEdgesCheck.checked
 
-    // XMB wave background (ps3xmbwave port)
+    // Wave background
     property alias cfg_waveFlowSpeed: waveFlowSpeedSlider.value
     property alias cfg_waveBandAmplitude: waveBandAmpSlider.value
     property alias cfg_waveHeightScale: waveHeightScaleSlider.value
@@ -60,10 +52,8 @@ KCM.SimpleKCM {
     property alias cfg_ambientSoundEnabled: ambientEnabledCheck.checked
     property alias cfg_ambientSoundVolume: ambientVolumeSlider.value
 
-    // StringList of hidden category names. Every cfg_<key> MUST be an alias so the
-    // config system can auto-generate the matching cfg_<key>Default; a plain
-    // `property var cfg_hiddenCategories` breaks that for ALL keys. So back it with
-    // an alias to a hidden helper property.
+    // Must be an alias, not `property var`, or the config system stops generating
+    // cfg_<key>Default for every key. Hence the helper store below.
     property alias cfg_hiddenCategories: hiddenCategoriesStore.value
     QtObject {
         id: hiddenCategoriesStore
@@ -80,15 +70,8 @@ KCM.SimpleKCM {
         hiddenSet = arr
     }
 
-    // Per-section "reset to defaults".
-    //
-    // The config loader only injects properties the page actually DECLARES, so the
-    // cfg_<key>Default values are NOT auto-created just by referencing them — an
-    // undeclared cfg_<key>Default reads back as `undefined`, and assigning that to a
-    // slider/spinbox does nothing (which is why reset appeared to do nothing).
-    // We therefore declare each default explicitly, mirroring contents/config/main.xml.
-    // (Same approach already used for cfg_favoritesDefault in ConfigFavorites.qml.)
-    // Keep these in sync with main.xml.
+    // Each cfg_<key>Default must be declared explicitly (the loader won't auto-create
+    // them), otherwise reset reads undefined and does nothing. Keep in sync with main.xml.
     property real cfg_backgroundOpacityDefault: 1.0
     property int  cfg_categoryIconSizeDefault: 112
     property int  cfg_appIconSizeDefault: 56
@@ -185,7 +168,6 @@ KCM.SimpleKCM {
     Kirigami.FormLayout {
         id: form
 
-        // ===================== Appearance =====================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Appearance")
             Kirigami.FormData.isSection: true
@@ -243,7 +225,6 @@ KCM.SimpleKCM {
             onClicked: page.resetAppearance()
         }
 
-        // ================== Behaviour ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Behaviour")
             Kirigami.FormData.isSection: true
@@ -255,7 +236,6 @@ KCM.SimpleKCM {
             text: i18n("Disable system edges while the dashboard is open")
         }
 
-        // ================= Category bar (mouse) =================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Category bar (mouse)")
             Kirigami.FormData.isSection: true
@@ -299,7 +279,7 @@ KCM.SimpleKCM {
             id: minSpeedSpin
             Kirigami.FormData.label: i18n("Min scroll speed (px/s):")
             from: 20
-            // Freely selectable up to 100 px/s below the chosen max speed.
+            // Kept at least 100 px/s below the max speed.
             to: Math.max(from, maxSpeedSpin.value - 100)
             stepSize: 10
             editable: true
@@ -308,7 +288,6 @@ KCM.SimpleKCM {
         QQC2.SpinBox {
             id: maxSpeedSpin
             Kirigami.FormData.label: i18n("Max scroll speed (px/s):")
-            // Always stays at least 100 px/s above the min speed.
             from: minSpeedSpin.value + 100
             to: 8000
             stepSize: 50
@@ -341,10 +320,6 @@ KCM.SimpleKCM {
             onClicked: page.resetCategoryBar()
         }
 
-        // ================== Wave background ==================
-        // Ports the demo's Spline Controls (the impactful subset; ranges & defaults
-        // from spline-settings.js). Remaining demo parameters keep the demo defaults
-        // (set in WaveBackground.qml).
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Wave background")
             Kirigami.FormData.isSection: true
@@ -407,7 +382,6 @@ KCM.SimpleKCM {
             onClicked: page.resetWave()
         }
 
-        // ================== Wave colour ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Wave colour")
             Kirigami.FormData.isSection: true
@@ -416,7 +390,7 @@ KCM.SimpleKCM {
         QQC2.ComboBox {
             id: monthCombo
             Kirigami.FormData.label: i18n("Colour preset:")
-            // index: 0 = Automatic, 1..12 = month, 13 = Custom (RGB sliders)
+            // index 0 = Automatic, 1..12 = month, 13 = Custom (RGB sliders)
             model: [i18n("Automatic (current month)"),
                     i18n("January"), i18n("February"), i18n("March"), i18n("April"),
                     i18n("May"), i18n("June"), i18n("July"), i18n("August"),
@@ -424,7 +398,7 @@ KCM.SimpleKCM {
                     i18n("Custom colour (RGB)")]
         }
 
-        // RGB sliders apply only in Custom mode (index 13); otherwise the month preset wins.
+        // RGB sliders apply only in Custom mode (index 13).
         RowLayout {
             Kirigami.FormData.label: i18n("Colour R:")
             enabled: monthCombo.currentIndex === 13
@@ -462,7 +436,6 @@ KCM.SimpleKCM {
             onClicked: page.resetWaveColour()
         }
 
-        // ================== Particles ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Particles")
             Kirigami.FormData.isSection: true
@@ -499,7 +472,6 @@ KCM.SimpleKCM {
             onClicked: page.resetParticles()
         }
 
-        // ================== Sounds ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Sounds")
             Kirigami.FormData.isSection: true
@@ -508,7 +480,7 @@ KCM.SimpleKCM {
         QQC2.ComboBox {
             id: navSoundCombo
             Kirigami.FormData.label: i18n("Navigation tick:")
-            // Indices map to navSoundMode (0/1/2).
+            // index maps to navSoundMode (0/1/2)
             model: [ i18n("XMB (default)"), i18n("Custom file…"), i18n("Off") ]
         }
 
@@ -552,13 +524,11 @@ KCM.SimpleKCM {
             onClicked: page.resetSounds()
         }
 
-        // ================== Visible categories ==================
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Visible categories")
             Kirigami.FormData.isSection: true
         }
 
-        // Enumerate the real menu categories for the show/hide checkboxes.
         Kicker.RootModel {
             id: categoriesModel
             autoPopulate: true
@@ -574,13 +544,12 @@ KCM.SimpleKCM {
 
         Repeater {
             model: categoriesModel
-            // Do NOT inject the model's "display" role as a property: QQC2.CheckBox
-            // (via AbstractButton) already has a FINAL "display" property, which
-            // would make the whole page fail to load. Read it through `model`.
+            // Don't expose the model's "display" role directly: AbstractButton already
+            // has a FINAL "display" property and the page would fail to load. Use `model`.
             QQC2.CheckBox {
                 required property var model
                 required property int index
-                // Persist the locale-independent icon-name key; show the translated label.
+                // Persist the locale-independent icon key, show the translated label.
                 readonly property string catKey: model.decoration ? String(model.decoration) : model.display
                 text: model.display
                 checked: page.hiddenSet.indexOf(catKey) === -1
@@ -595,11 +564,8 @@ KCM.SimpleKCM {
         }
     }
 
-    // Shared width for the slider value readouts so they line up in a neat column.
     readonly property int valueColumnWidth: Kirigami.Units.gridUnit * 2.5
 
-    // Fixed width for the field controls (sliders, text fields). Using a bounded width
-    // instead of Layout.fillWidth keeps the FormLayout's two-column block centred like
-    // a standard KDE settings page, rather than stretching the controls edge to edge.
+    // Bounded (not fillWidth) so the form stays centred instead of stretching edge to edge.
     readonly property int controlWidth: Kirigami.Units.gridUnit * 14
 }

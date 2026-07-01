@@ -1,18 +1,4 @@
-/*
- * main.qml — plasmoid entry point.
- *
- * The widget shows a single button in the panel; clicking it (or triggering the
- * applet's global shortcut) toggles a separate fullscreen Window (Dashboard.qml).
- *
- * Activation wiring mirrors the native Application Dashboard (kicker's isDash mode,
- * plasma-desktop/applets/kicker/CompactRepresentation.qml + main.qml):
- *   - The button is the applet's representation (shown inline in the panel).
- *   - Plasmoid.activationTogglesExpanded is set to false, so Plasma does NOT try to
- *     toggle an expanded popup on click. With the default (true), Plasma's applet
- *     wrapper consumes the click for popup handling and our MouseArea.onClicked
- *     never fires — which is exactly the "clicking does nothing" bug.
- *   - The click and the Plasmoid.activated() signal both call dashboard.toggle().
- */
+// Plasmoid entry point: a panel button that toggles the fullscreen Dashboard.
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
@@ -21,21 +7,19 @@ import org.kde.kirigami as Kirigami
 PlasmoidItem {
     id: root
 
-    // Show the button inline in the panel; we never use a Plasma popup.
+    // We show the button inline and never use a Plasma popup.
     preferredRepresentation: fullRepresentation
     fullRepresentation: buttonComponent
 
     Plasmoid.icon: Plasmoid.configuration.panelIcon
 
     Component.onCompleted: {
-        // Critical: without this, Plasma intercepts the click to manage popup
-        // expansion and our handlers never run. kicker does the same for isDash.
+        // Without this Plasma eats the click to toggle a popup and our handlers never fire.
         if (Plasmoid.hasOwnProperty("activationTogglesExpanded")) {
             Plasmoid.activationTogglesExpanded = false
         }
     }
 
-    // The fullscreen overlay, wired to the live configuration values.
     Dashboard {
         id: dashboard
         appletInterface: root
@@ -86,7 +70,7 @@ PlasmoidItem {
         ambientSoundVolume: Plasmoid.configuration.ambientSoundVolume
     }
 
-    // Global shortcut / standard activation path (keyboard, "activate" action).
+    // Keyboard / global-shortcut activation.
     Connections {
         target: Plasmoid
         function onActivated() {
@@ -95,8 +79,7 @@ PlasmoidItem {
         }
     }
 
-    // The panel button: an Item (so the panel can size it) containing the icon
-    // and a fill MouseArea on top to catch clicks.
+    // The panel button: icon + a fill MouseArea to catch clicks.
     Component {
         id: buttonComponent
 

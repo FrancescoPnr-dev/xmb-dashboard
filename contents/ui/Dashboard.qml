@@ -1,15 +1,4 @@
-/*
- * Dashboard
- * ---------
- * The fullscreen, semi-transparent XMB overlay. It is a top-level frameless
- * Window (not a plasmoid popup) so it can cover the whole screen like the native
- * Application Dashboard. It hosts:
- *   - the kicker RootModel (same data source as Kickoff),
- *   - an Instantiator that turns the categorised top-level rows into a plain JS
- *     array (so hidden categories can be filtered and the app submodel reached
- *     by source row without QSortFilterProxyModel::mapToSource, which QML can't call),
- *   - the cross layout (CategoryBar + AppColumn) and all navigation.
- */
+// Fullscreen frameless XMB overlay: a top-level Window, not a plasmoid popup.
 import QtQuick
 import QtQuick.Window
 import QtQuick.Effects
@@ -20,25 +9,23 @@ import org.kde.kitemmodels as KItemModels
 Window {
     id: dashboard
 
-    // --- configuration, injected by main.qml from Plasmoid.configuration ---
+    // Config injected by main.qml from Plasmoid.configuration.
     property real backgroundOpacity: 0.85
     property int categoryIconSize: 112
     property int appIconSize: 56
     property real intersectionXFraction: 0.30
     property var hiddenCategories: []
 
-    // Category-bar mouse feel (see CategoryBar.qml).
     property real hotZoneFractionLeft: 0.15
     property real hotZoneFractionRight: 0.15
     property int  minScrollSpeed: 150
     property int  maxScrollSpeed: 2600
     property int  snapDuration: 220
     property real magneticStrength: 0.7
-    property int  hotZoneBandHeight: 200   // px band around the category row (BUG3)
-    property bool manageScreenEdges: false  // disable system screen edges while open
+    property int  hotZoneBandHeight: 200   // px band around the category row
+    property bool manageScreenEdges: false
 
-    // --- XMB wave background (ps3xmbwave port), injected from Plasmoid.configuration.
-    //     Defaults mirror the demo (spline-settings.js / particles-settings.js). ---
+    // XMB wave background (ps3xmbwave port); defaults mirror the demo settings.
     property real waveFlowSpeed: 0.25
     property real waveBandAmplitude: 0.20
     property real waveHeightScale: 0.5
@@ -60,13 +47,11 @@ Window {
     property real waveParticleOpacity: 0.9
     property real waveParticleFlowSpeed: 0.8
 
-    // --- Navigation sound (injected from Plasmoid.configuration) ---
     // navSoundMode: 0 = bundled XMB-style tick, 1 = custom file, 2 = off.
     property int  navSoundMode: 0
     property string navSoundFile: ""
     property real navSoundVolume: 0.5
-    // Resolve the active tick source. The original PS3 sound is never bundled; mode 1
-    // loads whatever local file the user points at (their own copy).
+    // The original PS3 sound is never bundled; mode 1 loads the user's own local file.
     readonly property url navSoundSource:
         navSoundMode === 2 ? Qt.url("")
         : navSoundMode === 1
@@ -75,53 +60,40 @@ Window {
                   : Qt.url("file://" + navSoundFile)))
         : Qt.resolvedUrl("../sounds/nav-tick.wav")
 
-    // Looping background ambience, faded in on open / out on close.
+    // Looping background ambience, faded in/out on open/close.
     property bool ambientSoundEnabled: true
     property real ambientSoundVolume: 0.5
-    // Fade level (0..1), animated; multiplied by the configured volume.
     property real ambientLevel: 0.0
     Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
 
-    // The committed category (drives the app column). Updated only on a real
-    // selection — keyboard, click, or a settled hot-zone snap — NOT on every frame
-    // of a glide, so the app list does not reload while the bar is scrolling.
+    // Committed only on a real selection, so the app list doesn't reload mid-glide.
     property int committedIndex: 0
 
-    // The PlasmoidItem, passed from main.qml, so the kicker models can access the applet
-    // (app enumeration). Favourites are NOT the system favourites — they're our own list
-    // of app IDs, chosen in the settings and stored in the `favorites` config key.
+    // Favourites are NOT the system favourites — our own list of app IDs from config.
     property var appletInterface: null
     property var favorites: []
     onFavoritesChanged: rebuildFavorites()
 
-    // Rebuilt whenever the model or the hidden list changes.
     property var categories: []
 
-    // --- window setup ---
-    // Unique title: matched by the KWin "keep above" rule (install-kwin-rule.sh) so the
+    // Unique title matched by the KWin "keep above" rule (install-kwin-rule.sh), so the
     // overlay stays above a revealing auto-hide panel.
     title: "XMB Dashboard"
     width: Screen.width
     height: Screen.height
     color: "transparent"
-    // Keep flags minimal: a fullscreen window already sits in KWin's fullscreen
-    // layer (above the panel), so Qt.WindowStaysOnTopHint is unnecessary and, on
-    // Wayland, the StaysOnTop + frameless + parentless combination can stop the
-    // surface from mapping at all. Frameless alone is enough.
+    // Frameless alone is enough; on Wayland adding StaysOnTop to a frameless parentless
+    // window can stop the surface from mapping at all.
     flags: Qt.FramelessWindowHint
     transientParent: null
     visible: false
 
-    // Auto-close when focus is lost — but ONLY after the window has actually
-    // become active at least once. On Wayland the window does not get keyboard
-    // focus synchronously after show(), so a naive "close when !active" check
-    // fires during the open transition and the overlay closes instantly (the
-    // user just sees "nothing happens"). everActive guards against that.
+    // Auto-close on focus loss, but only once the window has been active: on Wayland
+    // focus isn't synchronous after show(), so a naive !active check dismisses it mid-open.
     property bool autoCloseArmed: false
     property bool everActive: false
 
-    // Disables Plasma's own screen-EDGE actions while the overlay is up (restores on
-    // close), so the dashboard can own the edges. Corners stay active.
+    // Frees Plasma's screen edges to the dashboard while open (corners stay active).
     EdgeGuard { id: edgeGuard }
 
     function open() {
@@ -155,8 +127,8 @@ Window {
         if (visible) {
             if (ambientSoundEnabled) {
                 ambientStopTimer.stop()
-                ambientLoop.play()        // loops forever (loops: Infinite)
-                ambientLevel = 1.0        // Behavior fades it in
+                ambientLoop.play()
+                ambientLevel = 1.0
             }
         } else {
             ambientLevel = 0.0            // fade out, then stop to free the device
@@ -164,9 +136,7 @@ Window {
         }
     }
 
-    // React to the setting being toggled while the dashboard is already open:
-    // onVisibleChanged only fires on open/close, so without this the loop would
-    // keep playing until the next close.
+    // onVisibleChanged only fires on open/close, so handle toggling while already open here.
     onAmbientSoundEnabledChanged: {
         if (!visible)
             return
@@ -193,16 +163,10 @@ Window {
         onTriggered: dashboard.autoCloseArmed = true
     }
 
-    // ---------------------------------------------------------------------
-    // Data source: identical to Kickoff. showAllAppsCategorized => each
-    // top-level row is an XDG menu category with its freedesktop icon, and
-    // rootModel.modelForRow(i) is that category's app list.
-    // ---------------------------------------------------------------------
+    // Same source as Kickoff; showAllAppsCategorized makes rootModel.modelForRow(i) a category's apps.
     Kicker.RootModel {
         id: rootModel
         autoPopulate: true
-        // Lets the favorites model read/persist the user's favourites (same mechanism
-        // as Kickoff: kactivitymanagerd + the applet config). Passed in from main.qml.
         appletInterface: dashboard.appletInterface
         showAllApps: false
         showAllAppsCategorized: true
@@ -212,12 +176,11 @@ Window {
         showPowerSession: false
         showFavoritesPlaceholder: false
         showSeparators: false
-        appNameFormat: 0            // 0 = application name only
+        appNameFormat: 0
         onCountChanged: Qt.callLater(dashboard.rebuildCategories)
     }
 
-    // ---- Favourites (our own list, NOT the system favourites) ----
-    // Flat list of ALL installed apps: source for resolving + launching the favourites.
+    // Flat list of all installed apps: source for resolving + launching favourites.
     Kicker.RootModel {
         id: allAppsRoot
         autoPopulate: true
@@ -238,7 +201,7 @@ Window {
     }
     property var allAppsFlat: null
 
-    // favoriteId -> source row over the flat list, so we can map our config IDs to apps.
+    // favoriteId -> source row over the flat list, mapping our config IDs to apps.
     Instantiator {
         id: appIndex
         model: dashboard.allAppsFlat
@@ -250,7 +213,6 @@ Window {
         onObjectRemoved: Qt.callLater(dashboard.rebuildFavorites)
     }
 
-    // Favourites = the flat app list filtered to the rows whose favoriteId is in `favorites`.
     KItemModels.KSortFilterProxyModel {
         id: favProxy
         sourceModel: dashboard.allAppsFlat
@@ -275,8 +237,7 @@ Window {
         favProxy.filterRowCallback = function(sourceRow, sourceParent) { return rows[sourceRow] === true }
     }
 
-    // Non-visual mirror of the categories so we can read name + icon per source
-    // row in plain JS (no QAbstractItemModel::index() needed).
+    // Non-visual mirror so we can read name + icon per source row in plain JS.
     Instantiator {
         id: categorySource
         model: rootModel
@@ -285,9 +246,7 @@ Window {
             required property var decoration
             readonly property string name: display
             readonly property var icon: decoration
-            // Stable, locale-independent key for persistence (the freedesktop icon
-            // name, e.g. "applications-games-symbolic"). Falls back to the display
-            // name only if a category exposes no icon.
+            // Stable, locale-independent persistence key (freedesktop icon name), else display name.
             readonly property string key: decoration ? String(decoration) : display
         }
         onObjectAdded: Qt.callLater(dashboard.rebuildCategories)
@@ -306,20 +265,16 @@ Window {
                 continue
             arr.push({ name: o.name, icon: o.icon, key: o.key, sourceRow: i })
         }
-        // "Favourites" is always the first category on the left (system favourites,
-        // org.kde.plasma favourites model). Hideable like the rest via its stable key.
+        // "Favourites" is always the first category; hideable like the rest via its key.
         if (hiddenCategories.indexOf("__favorites__") === -1)
             arr.unshift({ name: i18n("Favorites"), icon: "bookmarks",
                           key: "__favorites__", sourceRow: -1, favorites: true })
         categories = arr
-        // currentIndex is derived (read-only); CategoryBar self-clamps its position
-        // on count change. We only clamp the committed index here.
+        // CategoryBar self-clamps its position; we only clamp the committed index.
         if (committedIndex > Math.max(0, arr.length - 1))
             committedIndex = Math.max(0, arr.length - 1)
     }
 
-    // The committed category and its app submodel (app column follows committedIndex,
-    // not the live bar position).
     readonly property var currentCategory:
         (committedIndex >= 0 && committedIndex < categories.length)
             ? categories[committedIndex] : null
@@ -329,14 +284,7 @@ Window {
                                          : rootModel.modelForRow(currentCategory.sourceRow))
             : null
 
-    // ---------------------------------------------------------------------
-    // Visuals
-    // ---------------------------------------------------------------------
-
-    // Animated XMB wave backdrop (Qt6 ShaderEffect port of the linkev/PlayStation-3-XMB
-    // ps3xmbwave demo). Loaded through a Loader so that if ShaderEffect is unavailable
-    // (Qt Quick software backend) we fall back to a flat gradient and the dashboard still
-    // opens. backgroundOpacity dims the whole backdrop over the desktop.
+    // Animated XMB wave backdrop; a Loader so we fall back to a gradient if ShaderEffect is unavailable.
     Loader {
         id: backgroundLoader
         anchors.fill: parent
@@ -352,7 +300,6 @@ Window {
         }
         onLoaded: {
             item.animating = Qt.binding(function() { return dashboard.visible })
-            // wave
             item.flowSpeed = Qt.binding(function() { return dashboard.waveFlowSpeed })
             item.bandAmplitude = Qt.binding(function() { return dashboard.waveBandAmplitude })
             item.waveHeightScale = Qt.binding(function() { return dashboard.waveHeightScale })
@@ -363,7 +310,6 @@ Window {
             item.waveOpacity = Qt.binding(function() { return dashboard.waveOpacity })
             item.brightness = Qt.binding(function() { return dashboard.waveBrightness })
             item.rowCount = Qt.binding(function() { return dashboard.waveRowCount })
-            // gradient / colour
             if (item.hasOwnProperty("colorMonth"))
                 item.colorMonth = Qt.binding(function() { return dashboard.waveColorMonth })
             item.colorR = Qt.binding(function() { return dashboard.waveColorR })
@@ -371,7 +317,6 @@ Window {
             item.colorB = Qt.binding(function() { return dashboard.waveColorB })
             item.gradientTopMul = Qt.binding(function() { return dashboard.waveGradientTopMul })
             item.gradientBotMul = Qt.binding(function() { return dashboard.waveGradientBotMul })
-            // particles
             if (item.hasOwnProperty("particlesEnabled"))
                 item.particlesEnabled = Qt.binding(function() { return dashboard.waveParticlesEnabled })
             if (item.hasOwnProperty("pDensity"))
@@ -386,9 +331,7 @@ Window {
         anchors.fill: parent
         focus: true
 
-        // Light blur over the XMB cross while the search, the top-bar power list, or a
-        // top-bar quick setting is active. Animated for a soft fade in/out; the layer is
-        // disabled once fully faded so there's no cost when idle.
+        // Light blur over the cross while search/top bar is active; layer off when idle for no cost.
         readonly property bool blurWanted: searchOverlay.active || topBar.powerExpanded || topBar.contentHovered
         property real blurAmt: blurWanted ? 0.45 : 0.0
         Behavior on blurAmt { NumberAnimation { duration: 260; easing.type: Easing.InOutQuad } }
@@ -400,36 +343,30 @@ Window {
             brightness: -0.08 * (content.blurAmt / 0.45)
         }
 
-        // The conceptual cross intersection (fixed, center-left like the PS3).
         readonly property real interX: width * dashboard.intersectionXFraction
-        // The horizontal bar sits a little above centre; the selected app pins at
-        // centre, so apps fan out above and below the bar without colliding with
-        // the selected category icon. Tweak these two to taste.
+        // Bar sits above centre, selected app pins at centre, so apps fan out clear of the icon.
         readonly property real barCenterY: height * 0.42
         readonly property real appPinY: height * 0.54
 
-        // Click on empty space closes the dashboard.
         MouseArea {
             anchors.fill: parent
             onClicked: dashboard.close()
         }
 
-        // Middle (wheel) click anywhere launches the highlighted app — not only when
-        // hovering the app itself. A TapHandler (not a MouseArea) so it never overrides
-        // the hover cursor and never steals left/right clicks from the items below.
+        // Middle-click anywhere launches the highlighted app. TapHandler (not MouseArea) so it
+        // doesn't override the hover cursor or steal clicks from items below.
         TapHandler {
             acceptedButtons: Qt.MiddleButton
             enabled: !searchOverlay.active
             onTapped: appColumn.launchCurrent()
         }
 
-        // Tracks the cursor across the whole overlay and feeds it to the category
-        // bar's edge hot zones (passive: does not block clicks/hover on items).
+        // Tracks the cursor for the category bar's edge hot zones (passive).
         HoverHandler {
             id: pointerTracker
         }
 
-        // Horizontal arm -------------------------------------------------
+        // Horizontal arm
         CategoryBar {
             id: categoryBar
             width: parent.width
@@ -439,11 +376,10 @@ Window {
             model: dashboard.categories
             z: 1
 
-            // Mouse hot-zone feel.
             pointerX: pointerTracker.point.position.x
             pointerY: pointerTracker.point.position.y
             pointerActive: pointerTracker.hovered
-            bandCenterY: content.barCenterY        // band is centred on the category row
+            bandCenterY: content.barCenterY
             bandHeight: dashboard.hotZoneBandHeight
             hotZoneFractionLeft: dashboard.hotZoneFractionLeft
             hotZoneFractionRight: dashboard.hotZoneFractionRight
@@ -452,11 +388,10 @@ Window {
             snapDuration: dashboard.snapDuration
             magneticStrength: dashboard.magneticStrength
 
-            // Commit -> the app column follows the chosen category.
             onCommitted: (index) => dashboard.committedIndex = index
         }
 
-        // Vertical arm ---------------------------------------------------
+        // Vertical arm
         AppColumn {
             id: appColumn
             x: content.interX - dashboard.appIconSize / 2
@@ -470,10 +405,9 @@ Window {
             categoryIconSize: dashboard.categoryIconSize
             model: dashboard.appsModel
             z: 2
-            // Don't let the wheel scroll the app list while the top bar (quick settings)
-            // is under the pointer — the wheel adjusts those instead.
+            // Wheel adjusts the top bar's quick settings when hovering it, not the apps.
             wheelLocked: topBar.contentHovered
-            // Favourites use a filtered proxy with no trigger() — launch via the source.
+            // The favourites proxy has no trigger() — launch via the source model.
             launchHandler: (dashboard.currentCategory && dashboard.currentCategory.favorites)
                 ? function(idx) {
                       var src = favProxy.mapToSource(favProxy.index(idx, 0))
@@ -484,9 +418,7 @@ Window {
             onAppLaunched: dashboard.close()
         }
 
-        // Navigation -----------------------------------------------------
-        // Keyboard nav is unchanged in behaviour: goPrev/goNext animate the bar
-        // (strict range) and commit immediately, so the app column updates at once.
+        // Navigation
         Keys.onLeftPressed:  categoryBar.goPrev()
         Keys.onRightPressed: categoryBar.goNext()
         Keys.onUpPressed:    appColumn.up()
@@ -495,9 +427,8 @@ Window {
         Keys.onEnterPressed:  appColumn.launchCurrent()
         Keys.onEscapePressed: dashboard.close()
 
-        // Type-to-search: a printable letter/digit (no modifiers) opens the minimal
-        // KRunner overlay and seeds it with that character. Nav keys (empty text) fall
-        // through to the handlers above.
+        // Type-to-search: a printable char opens the KRunner overlay seeded with it;
+        // nav keys (empty text) fall through to the handlers above.
         Keys.onPressed: (event) => {
             if (!searchOverlay.active
                     && event.text.length === 1 && event.text.trim().length === 1
@@ -507,14 +438,10 @@ Window {
             }
         }
 
-        // Scroll wheel: vertical -> apps, horizontal -> categories. Disabled while the
-        // search overlay is active, so the wheel scrolls the results, not the app column.
         WheelHandler {
             enabled: !searchOverlay.active && !topBar.contentHovered
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-            // Accumulate the vertical delta and step one app per full notch (120), so a
-            // fast spin moves exactly as many apps as notches and hi-res/touchpad deltas
-            // don't lose or over-count steps. Reset on direction change for snappy reversal.
+            // Step one app per full notch (120) so hi-res/touchpad deltas don't miscount.
             property real accumY: 0
             onWheel: (event) => {
                 if ((accumY > 0) !== (event.angleDelta.y > 0))
@@ -528,7 +455,6 @@ Window {
         }
     }
 
-    // PS3-style system date + time, top-right.
     XmbClock {
         z: 100
         anchors.top: parent.top
@@ -538,8 +464,7 @@ Window {
         pixelSize: Math.max(20, Math.round(dashboard.height * 0.026))
     }
 
-    // Top-edge reveal: XMB system bar (Power for now). Self-contained, independent of
-    // Plasma's screen edges.
+    // Top-edge reveal system bar, independent of Plasma's screen edges.
     XmbTopBar {
         id: topBar
         anchors.fill: parent
@@ -547,7 +472,6 @@ Window {
         onActionTriggered: dashboard.close()
     }
 
-    // Type-to-search (KRunner), minimal and centred. Opened by typing (see content above).
     XmbSearch {
         id: searchOverlay
         anchors.fill: parent
@@ -556,50 +480,42 @@ Window {
         onClosed: content.forceActiveFocus()
     }
 
-    // ---------------------------------------------------------------------
-    // Navigation sound (the PS3 "tick" as the cursor moves)
-    // ---------------------------------------------------------------------
     XmbSound {
         id: navSound
         source: dashboard.navSoundSource
         volume: dashboard.navSoundVolume
     }
 
-    // Looping background pad (bundled original). Gapless loop via SoundEffect; the
-    // volume tracks the animated fade level so it eases in on open / out on close.
+    // Gapless background loop; volume tracks the animated fade level.
     SoundEffect {
         id: ambientLoop
         source: Qt.resolvedUrl("../sounds/ambient-loop.wav")
         loops: SoundEffect.Infinite
         volume: (dashboard.ambientSoundEnabled ? 1 : 0) * dashboard.ambientLevel * dashboard.ambientSoundVolume
     }
-    // Stop the loop once it has faded out, so it isn't running while closed.
     Timer {
         id: ambientStopTimer
         interval: 1500
         onTriggered: ambientLoop.stop()
     }
     function playNavTick() {
-        // Only while open and past the open transition, so we don't tick on the
-        // initial layout / model population.
+        // Only past the open transition, so we don't tick on initial model population.
         if (!dashboard.visible || !dashboard.autoCloseArmed || dashboard.navSoundMode === 2)
             return
         navSound.play()
     }
 
-    // Switching category resets the app column to its first item; swallow that
-    // (and any settling) for a moment so it doesn't fire a spurious app tick.
+    // Switching category resets the app column; swallow that so it doesn't fire a spurious tick.
     Timer { id: catSwitchGuard; interval: 250 }
     Connections {
         target: dashboard
         function onCommittedIndexChanged() { catSwitchGuard.restart() }
     }
-    // Category cursor moved (keyboard, wheel, or hot-zone glide past each category).
     Connections {
         target: categoryBar
         function onCurrentIndexChanged() { dashboard.playNavTick() }
     }
-    // App cursor moved (up/down) — but not the auto-reset when the category changes.
+    // App cursor moved — but not the auto-reset when the category changes.
     Connections {
         target: appColumn
         function onCurrentIndexChanged() {

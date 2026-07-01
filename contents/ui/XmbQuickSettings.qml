@@ -1,11 +1,3 @@
-/*
- * XmbQuickSettings — centre of the top reveal bar: Brightness, Volume, Network.
- *
- * Plain-text labels (XMB style, no icons). Hovering an item shows its current value and
- * lets the WHEEL adjust it: brightness via org.kde.Solid.PowerManagement BrightnessControl
- * (DBus), volume via wpctl (the default sink). Network is click-only -> opens the system
- * network settings. The wheel is consumed here so it never scrolls the XMB underneath.
- */
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Effects
@@ -16,12 +8,10 @@ Item {
 
     property int labelSize: 18
     property bool active: false
-    readonly property bool hovered: bandHover.hovered    // whole band, no gaps
+    readonly property bool hovered: bandHover.hovered
     signal closeRequested()
 
-    // Whole-band hover (covers the gaps between labels) -> blurs the XMB and enables the
-    // wheel. The actual WheelHandler lives on the fullscreen bar root (like the search
-    // overlay), and calls wheelStep() to drive whichever item is under the pointer.
+    // covers the gaps between labels so the hover band is continuous; the WheelHandler on the bar root calls wheelStep()
     HoverHandler { id: bandHover }
     function wheelStep(up) {
         if (briHover.hovered) qs.briStep(up)
@@ -33,8 +23,7 @@ Item {
     property int _briRaw: 0
     property int _briMax: 0
 
-    // Real size (a bare Item does NOT adopt implicitWidth/Height), padded so the hover
-    // band and the wheel cover the whole area including the gaps between labels.
+    // a bare Item doesn't adopt implicitWidth/Height, so set it explicitly (with padding for the hover band)
     implicitWidth: rowL.implicitWidth + Math.round(labelSize * 2.6)
     implicitHeight: rowL.implicitHeight + Math.round(labelSize * 1.2)
     width: implicitWidth
@@ -91,7 +80,7 @@ Item {
             shadowBlur: 0.7; shadowVerticalOffset: 1
         }
 
-        // ---- Brightness ----
+        // Brightness
         ColumnLayout {
             spacing: 1
             Text {
@@ -110,7 +99,7 @@ Item {
             HoverHandler { id: briHover; cursorShape: Qt.PointingHandCursor }
         }
 
-        // ---- Volume ----
+        // Volume
         ColumnLayout {
             spacing: 1
             Text {
@@ -129,7 +118,7 @@ Item {
             HoverHandler { id: volHover; cursorShape: Qt.PointingHandCursor }
         }
 
-        // ---- Network (click only) ----
+        // Network (click only)
         ColumnLayout {
             spacing: 1
             Text {

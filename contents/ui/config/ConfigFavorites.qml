@@ -1,13 +1,3 @@
-/*
- * ConfigFavorites.qml — "Favorites" settings page.
- *
- * Lets the user build the dashboard's Favourites category by picking from ALL installed
- * applications. The chosen apps are stored (by favouriteId) in the `favorites` config key;
- * this is the widget's OWN list, independent of the system favourites. Starts empty.
- *
- * Uses ScrollViewKCM (not SimpleKCM): a ListView needs a view that fills the page, not the
- * implicit-height content area SimpleKCM gives (which would leave the list invisible).
- */
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC2
@@ -16,10 +6,10 @@ import org.kde.kcmutils as KCM
 import org.kde.plasma.private.kicker as Kicker
 import org.kde.kitemmodels as KItemModels
 
+// ScrollViewKCM, not SimpleKCM: the ListView needs a view that fills the page or it stays invisible.
 KCM.ScrollViewKCM {
     id: page
 
-    // Contract with the config system (StringList of favouriteIds).
     property var cfg_favorites: []
     property var cfg_favoritesDefault: []
 
@@ -32,7 +22,6 @@ KCM.ScrollViewKCM {
         cfg_favorites = arr
     }
 
-    // Flat list of all installed applications.
     Kicker.RootModel {
         id: allApps
         autoPopulate: true
@@ -81,8 +70,7 @@ KCM.ScrollViewKCM {
         clip: true
         reuseItems: true
 
-        // Plain Item delegate: a Control (ItemDelegate/CheckDelegate) has its own FINAL
-        // `display` property that collides with the model's "display" role.
+        // Plain Item: a Control's final `display` property would clash with the model's "display" role.
         delegate: Item {
             id: row
             required property string display

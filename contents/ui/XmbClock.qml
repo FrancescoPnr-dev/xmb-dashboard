@@ -1,8 +1,3 @@
-/*
- * XmbClock — PS3 XMB top-right date + time.
- * Format like the console: "M/D  h:mm AM/PM" (e.g. 5/25  10:41 AM), white, light,
- * with a soft shadow for legibility over the wave. Ticks once a second.
- */
 import QtQuick
 import QtQuick.Effects
 
