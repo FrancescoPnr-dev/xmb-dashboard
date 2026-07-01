@@ -13,7 +13,7 @@
                 "Email": "FrancescoPnr-dev@proton.me"
             }
         ],
-        "Icon": "applications-all",
+        "Icon": "xmb-dashboard",
         "Id": "org.kde.plasma.xmbdashboard",
         "License": "GPL-3.0-only",
         "Name": "XMB Dashboard",

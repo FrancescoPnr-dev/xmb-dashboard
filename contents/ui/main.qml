@@ -96,7 +96,9 @@ PlasmoidItem {
             Kirigami.Icon {
                 id: buttonIcon
                 anchors.fill: parent
-                source: Plasmoid.icon
+                // Bundled monochrome XMB icon by default; a custom panelIcon overrides it.
+                source: Plasmoid.configuration.panelIcon === "applications-all"
+                    ? Qt.resolvedUrl("../icons/xmb-dashboard.svg") : Plasmoid.icon
                 active: mouseArea.containsMouse
             }
 
