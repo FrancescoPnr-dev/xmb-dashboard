@@ -75,3 +75,6 @@ All the repo is licensed under **GPL-3.0** (see the `LICENSES/` folder).
 
 [PlayStation-3-XMB]: https://github.com/linkev/PlayStation-3-XMB
 [Alphardex]: https://codepen.io/alphardex/pen/poPZNwE
+
+
+<img width="1408" height="768" alt="5" src="https://github.com/user-attachments/assets/5ab9fe31-f96f-43e9-9fbc-7e72241cfa5b" />
