@@ -17,6 +17,7 @@ Item {
     property bool wheelLocked: false
 
     signal appLaunched()
+    signal navigated()
 
     readonly property int cellHeight: Math.round(iconSize * 1.45)
     readonly property real listSpacing: Math.round(iconSize * 0.30)
@@ -39,8 +40,8 @@ Item {
     // Set for Favourites, whose ListModel has no trigger(); called with the current row.
     property var launchHandler: null
 
-    function up()   { list.decrementCurrentIndex() }
-    function down() { list.incrementCurrentIndex() }
+    function up()   { var i = list.currentIndex; list.decrementCurrentIndex(); if (list.currentIndex !== i) navigated() }
+    function down() { var i = list.currentIndex; list.incrementCurrentIndex(); if (list.currentIndex !== i) navigated() }
     function launchCurrent() {
         if (list.currentIndex < 0)
             return
