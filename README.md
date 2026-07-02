@@ -28,6 +28,11 @@ background, type-to-search and subtle sounds.
 
 ## Install
 
+> **Recommended:** install the [YAMIS](https://store.kde.org/p/2303161) monochrome
+> icon theme first (KDE Store, GPL-3.0, by DIRN) and set it in *System Settings →
+> Colors & Themes → Icons*. XMB Dashboard is designed around its clean adaptive
+> look, and the whole cross stays visually coherent.
+
 From the folder containing `metadata.json`:
 
 ```bash
