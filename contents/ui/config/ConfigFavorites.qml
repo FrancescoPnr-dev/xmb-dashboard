@@ -15,6 +15,10 @@ KCM.ScrollViewKCM {
     property var cfg_favorites: []
     property var cfg_favoritesDefault: []
 
+    // Drives the Apply button; the automatic cfg_* tracking misses replaced pages.
+    property bool unsavedChanges: false
+    function saveConfig() { unsavedChanges = false }
+
     function isFav(favId) { return (cfg_favorites || []).indexOf(favId) !== -1 }
     function toggleFav(favId, on) {
         var arr = (cfg_favorites || []).slice()
@@ -22,6 +26,7 @@ KCM.ScrollViewKCM {
         if (on && i === -1) arr.push(favId)
         else if (!on && i !== -1) arr.splice(i, 1)
         cfg_favorites = arr
+        unsavedChanges = true
     }
 
     Kicker.RootModel {
@@ -87,7 +92,8 @@ KCM.ScrollViewKCM {
                 opacity: rowHover.hovered ? 0.15 : 0.0
             }
             HoverHandler { id: rowHover }
-            TapHandler { onTapped: favCheck.toggle() }
+            // toggle() alone would not emit toggled(), so go through toggleFav directly
+            TapHandler { onTapped: page.toggleFav(row.favoriteId, !page.isFav(row.favoriteId)) }
 
             RowLayout {
                 id: rowLayout
@@ -110,7 +116,10 @@ KCM.ScrollViewKCM {
                 QQC2.CheckBox {
                     id: favCheck
                     checked: page.isFav(row.favoriteId)
-                    onToggled: page.toggleFav(row.favoriteId, checked)
+                    onToggled: {
+                        page.toggleFav(row.favoriteId, checked)
+                        checked = Qt.binding(() => page.isFav(row.favoriteId))
+                    }
                 }
             }
         }
