@@ -19,7 +19,7 @@
         "Name": "XMB Dashboard",
         "Name[it]": "Cruscotto XMB",
         "Version": "0.1.0",
-        "Website": "https://github.com/Francesco-1-7/xmb-dashboard"
+        "Website": "https://github.com/FrancescoPnr-dev/xmb-dashboard"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
     "X-Plasma-Provides": [
