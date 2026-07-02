@@ -1,0 +1,396 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the plasma_applet_org.kde.plasma.xmbdashboard package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_applet_org.kde.plasma.xmbdashboard\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-02 12:00+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: contents/config/config.qml:12
+msgid "General"
+msgstr ""
+
+#: contents/config/config.qml:17 contents/ui/Dashboard.qml:276
+msgid "Favorites"
+msgstr ""
+
+#: contents/ui/config/ConfigFavorites.qml:63
+msgid "Pick the applications to show in the dashboard's Favorites category."
+msgstr ""
+
+#: contents/ui/config/ConfigFavorites.qml:70
+msgid "Search applications…"
+msgstr ""
+
+#: contents/ui/config/ConfigFavorites.qml:133
+msgid "No applications found."
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:185
+msgid "Appearance"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:190
+msgid "Background opacity:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:205
+msgid "Category icon size (px):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:211
+msgid "App icon size (px):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:216
+msgid "Cross position (from left):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:231
+msgid "Panel icon name:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:232
+msgid "XMB logo (default)"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:237
+#: contents/ui/config/ConfigGeneral.qml:267
+#: contents/ui/config/ConfigGeneral.qml:362
+#: contents/ui/config/ConfigGeneral.qml:424
+#: contents/ui/config/ConfigGeneral.qml:478
+#: contents/ui/config/ConfigGeneral.qml:514
+#: contents/ui/config/ConfigGeneral.qml:565
+msgid "Reset section to defaults"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:243
+msgid "Clock"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:249
+msgid "Time format:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:251
+#: contents/ui/config/ConfigGeneral.qml:258
+msgid "System"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:251
+msgid "12-hour"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:251
+msgid "24-hour"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:256
+msgid "Date format:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:258
+msgid "Day/month"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:258
+msgid "Month/day"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:263
+msgid "Show date:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:273
+msgid "Behaviour"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:279
+msgid "Screen edges:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:280
+msgid "Disable system edges while the dashboard is open"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:284
+msgid "Category bar (mouse)"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:289
+msgid "Left hot-zone width:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:303
+msgid "Right hot-zone width:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:318
+msgid "Hot-zone band height (px):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:324
+msgid "Min scroll speed (px/s):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:334
+msgid "Max scroll speed (px/s):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:343
+msgid "Snap animation (ms):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:348
+msgid "Magnetic glue strength:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:368
+msgid "Wave background"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:373
+#: contents/ui/config/ConfigGeneral.qml:507
+msgid "Flow speed:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:378
+msgid "Band amplitude:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:383
+msgid "Wave height:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:388
+msgid "Soft clip:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:393
+msgid "Tension:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:398
+msgid "Fresnel power:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:403
+msgid "Fresnel scale:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:408
+msgid "Wave opacity:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:413
+msgid "Brightness:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:419
+msgid "Wave detail (rows):"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:430
+msgid "Wave colour"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:436
+msgid "Colour preset:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:438
+msgid "Automatic (current month)"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:439
+msgid "January"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:439
+msgid "February"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:439
+msgid "March"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:439
+msgid "April"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:440
+msgid "May"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:440
+msgid "June"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:440
+msgid "July"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:440
+msgid "August"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:441
+msgid "September"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:441
+msgid "October"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:441
+msgid "November"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:441
+msgid "December"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:442
+msgid "Custom colour (RGB)"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:447
+msgid "Colour R:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:453
+msgid "Colour G:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:459
+msgid "Colour B:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:465
+msgid "Gradient top mul:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:471
+msgid "Gradient bottom mul:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:484
+msgid "Particles"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:490
+msgid "Particles:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:491
+msgid "Enabled"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:495
+msgid "Count:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:501
+msgid "Opacity:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:520
+msgid "Sounds"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:526
+msgid "Navigation tick:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:528
+msgid "XMB (default)"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:528
+msgid "Custom file…"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:528
+msgid "Off"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:533
+msgid "Custom sound file:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:536
+msgid "/path/to/sound.wav or .mp3"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:543
+msgid ""
+"The original PS3 sound is not bundled (Sony copyright). Point this at your "
+"own local copy. WAV gives the lowest latency."
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:547
+msgid "Volume:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:555
+msgid "Background ambience:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:558
+msgid "Ambience volume:"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:571
+msgid "Visible categories"
+msgstr ""
+
+#: contents/ui/config/ConfigGeneral.qml:604
+msgid "Show all categories"
+msgstr ""
+
+#: contents/ui/XmbQuickSettings.qml:90
+msgid "Brightness"
+msgstr ""
+
+#: contents/ui/XmbQuickSettings.qml:109
+msgid "Volume"
+msgstr ""
+
+#: contents/ui/XmbQuickSettings.qml:128
+msgid "Network"
+msgstr ""
+
+#: contents/ui/XmbQuickSettings.qml:134
+msgid "Settings"
+msgstr ""
+
+#: contents/ui/XmbTopBar.qml:106
+msgid "Lock"
+msgstr ""
+
+#: contents/ui/XmbTopBar.qml:107
+msgid "Log out"
+msgstr ""
+
+#: contents/ui/XmbTopBar.qml:108
+msgid "Sleep"
+msgstr ""
+
+#: contents/ui/XmbTopBar.qml:109
+msgid "Restart"
+msgstr ""
+
+#: contents/ui/XmbTopBar.qml:110
+msgid "Shut down"
+msgstr ""

@@ -24,6 +24,9 @@ KCM.SimpleKCM {
     property alias cfg_magneticStrength: magneticSlider.value
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
     property alias cfg_manageScreenEdges: manageScreenEdgesCheck.checked
+    property alias cfg_clockTimeFormat: clockFormatCombo.currentIndex
+    property alias cfg_clockDateFormat: clockDateFormatCombo.currentIndex
+    property alias cfg_clockShowDate: clockDateCheck.checked
 
     // Wave background
     property alias cfg_waveFlowSpeed: waveFlowSpeedSlider.value
@@ -79,6 +82,9 @@ KCM.SimpleKCM {
     property int  cfg_appIconSizeDefault: 56
     property real cfg_intersectionXFractionDefault: 0.30
     property string cfg_panelIconDefault: ""
+    property int  cfg_clockTimeFormatDefault: 0
+    property int  cfg_clockDateFormatDefault: 0
+    property bool cfg_clockShowDateDefault: true
 
     property real cfg_hotZoneFractionLeftDefault: 0.15
     property real cfg_hotZoneFractionRightDefault: 0.15
@@ -123,6 +129,11 @@ KCM.SimpleKCM {
         cfg_appIconSize = cfg_appIconSizeDefault
         cfg_intersectionXFraction = cfg_intersectionXFractionDefault
         cfg_panelIcon = cfg_panelIconDefault
+    }
+    function resetClock() {
+        cfg_clockTimeFormat = cfg_clockTimeFormatDefault
+        cfg_clockDateFormat = cfg_clockDateFormatDefault
+        cfg_clockShowDate = cfg_clockShowDateDefault
     }
     function resetCategoryBar() {
         cfg_hotZoneFractionLeft = cfg_hotZoneFractionLeftDefault
@@ -226,6 +237,36 @@ KCM.SimpleKCM {
             text: i18n("Reset section to defaults")
             icon.name: "edit-undo"
             onClicked: page.resetAppearance()
+        }
+
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Clock")
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.ComboBox {
+            id: clockFormatCombo
+            Kirigami.FormData.label: i18n("Time format:")
+            Layout.preferredWidth: page.controlWidth
+            model: [i18n("System"), i18n("12-hour"), i18n("24-hour")]
+        }
+
+        QQC2.ComboBox {
+            id: clockDateFormatCombo
+            Kirigami.FormData.label: i18n("Date format:")
+            Layout.preferredWidth: page.controlWidth
+            model: [i18n("System"), i18n("Day/month"), i18n("Month/day")]
+        }
+
+        QQC2.CheckBox {
+            id: clockDateCheck
+            Kirigami.FormData.label: i18n("Show date:")
+        }
+
+        QQC2.Button {
+            text: i18n("Reset section to defaults")
+            icon.name: "edit-undo"
+            onClicked: page.resetClock()
         }
 
         Kirigami.Separator {
