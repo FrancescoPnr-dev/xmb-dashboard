@@ -12,7 +12,10 @@ Item {
 
     property bool revealed: false
     property bool powerExpanded: false
+    property bool atBottom: false
     property int labelSize: Math.max(16, Math.round(height * 0.021))
+    // slides off-edge by 8px while hidden
+    readonly property int edgeMargin: Math.round(height * 0.02) + (revealed ? 0 : -8)
     // true while over interactive content; drives the XMB blur and wheel routing
     readonly property bool contentHovered: chevronHover.hovered || powerHover.hovered || quick.hovered
 
@@ -39,14 +42,17 @@ Item {
         onTriggered: if (!root.stillHovered()) root.revealed = false
     }
 
-    // chevron, top-left
+    // chevron, on the left
     Item {
         id: chevronBox
-        anchors.top: parent.top
+        anchors.top: root.atBottom ? undefined : parent.top
+        anchors.bottom: root.atBottom ? parent.bottom : undefined
         anchors.left: parent.left
-        anchors.topMargin: Math.round(root.height * 0.02) + (root.revealed ? 0 : -8)
+        anchors.topMargin: root.edgeMargin
+        anchors.bottomMargin: root.edgeMargin
         anchors.leftMargin: Math.round(root.width * 0.03)
         Behavior on anchors.topMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+        Behavior on anchors.bottomMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
         width: Math.round(root.labelSize * 2.2)
         height: width
 
@@ -64,7 +70,7 @@ Item {
             Behavior on opacity { NumberAnimation { duration: 120 } }
             font.pixelSize: Math.round(root.labelSize * 1.7)
             font.weight: Font.Light
-            rotation: root.powerExpanded ? 90 : 0
+            rotation: root.powerExpanded ? (root.atBottom ? -90 : 90) : 0
             Behavior on rotation { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
             layer.enabled: true
             layer.effect: MultiEffect {
@@ -83,9 +89,11 @@ Item {
     // power actions
     ColumnLayout {
         id: powerCol
-        anchors.top: chevronBox.bottom
+        anchors.top: root.atBottom ? undefined : chevronBox.bottom
+        anchors.bottom: root.atBottom ? chevronBox.top : undefined
         anchors.left: chevronBox.left
         anchors.topMargin: Math.round(root.labelSize * 0.4)
+        anchors.bottomMargin: Math.round(root.labelSize * 0.4)
         anchors.leftMargin: Math.round(root.labelSize * 0.3)
         spacing: Math.round(root.labelSize * 0.9)
 
@@ -142,9 +150,12 @@ Item {
     XmbQuickSettings {
         id: quick
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
-        anchors.topMargin: Math.round(root.height * 0.02) + (root.revealed ? 0 : -8)
+        anchors.top: root.atBottom ? undefined : parent.top
+        anchors.bottom: root.atBottom ? parent.bottom : undefined
+        anchors.topMargin: root.edgeMargin
+        anchors.bottomMargin: root.edgeMargin
         Behavior on anchors.topMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+        Behavior on anchors.bottomMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
         labelSize: root.labelSize
         active: root.revealed
         visible: root.revealed || opacity > 0.01
@@ -154,9 +165,10 @@ Item {
         onHoveredChanged: root.maybeHide()
     }
 
-    // trigger strip pinned to the top edge
+    // trigger strip pinned to the reveal edge
     Item {
-        anchors.top: parent.top
+        anchors.top: root.atBottom ? undefined : parent.top
+        anchors.bottom: root.atBottom ? parent.bottom : undefined
         anchors.left: parent.left
         anchors.right: parent.right
         height: 8

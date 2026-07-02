@@ -24,6 +24,7 @@ KCM.SimpleKCM {
     property alias cfg_magneticStrength: magneticSlider.value
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
     property alias cfg_manageScreenEdges: manageScreenEdgesCheck.checked
+    property alias cfg_topBarPosition: barRevealCombo.currentIndex
     property alias cfg_clockTimeFormat: clockFormatCombo.currentIndex
     property alias cfg_clockDateFormat: clockDateFormatCombo.currentIndex
     property alias cfg_clockShowDate: clockDateCheck.checked
@@ -85,6 +86,7 @@ KCM.SimpleKCM {
     property int  cfg_clockTimeFormatDefault: 0
     property int  cfg_clockDateFormatDefault: 0
     property bool cfg_clockShowDateDefault: true
+    property int  cfg_topBarPositionDefault: 0
 
     property real cfg_hotZoneFractionLeftDefault: 0.15
     property real cfg_hotZoneFractionRightDefault: 0.15
@@ -278,6 +280,13 @@ KCM.SimpleKCM {
             id: manageScreenEdgesCheck
             Kirigami.FormData.label: i18n("Screen edges:")
             text: i18n("Disable system edges while the dashboard is open")
+        }
+
+        QQC2.ComboBox {
+            id: barRevealCombo
+            Kirigami.FormData.label: i18n("Bar reveal:")
+            Layout.preferredWidth: page.controlWidth
+            model: [i18n("Top edge"), i18n("Bottom edge")]
         }
 
         Kirigami.Separator {

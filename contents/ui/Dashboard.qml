@@ -69,6 +69,8 @@ Window {
     property int clockTimeFormat: 0
     property int clockDateFormat: 0
     property bool clockShowDate: true
+
+    property int topBarPosition: 0
     property real ambientLevel: 0.0
     Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
 
@@ -478,6 +480,7 @@ Window {
         id: topBar
         anchors.fill: parent
         z: 90
+        atBottom: dashboard.topBarPosition === 1
         onActionTriggered: dashboard.close()
     }
 
