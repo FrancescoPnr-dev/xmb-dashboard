@@ -64,6 +64,10 @@ For quick iteration during development, `plasmoidviewer --applet .` (from
 
 ## Usage
 
+The widget is just a panel button: the XMB itself opens as a fullscreen
+overlay on top of your desktop, and closes with Esc — nothing sits on the
+desktop permanently.
+
 - **Arrows / wheel / screen edges** — move between apps and categories.
 - **Enter or left-click** the highlighted app, or **middle-click anywhere** — launch it.
 - **Start typing** — search; Enter or middle-click runs the top result.
