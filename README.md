@@ -1,5 +1,7 @@
-# XMB Dashboard
 [![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/francescopnr)
+🙏🏼❤️
+
+# XMB Dashboard
 
 A fullscreen app launcher for KDE Plasma 6, inspired by the PlayStation 3 / PSP
 **XrossMediaBar**. 
