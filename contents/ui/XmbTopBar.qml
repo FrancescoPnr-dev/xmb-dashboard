@@ -13,6 +13,7 @@ Item {
     property bool revealed: false
     property bool powerExpanded: false
     property bool atBottom: false
+    property var translate: (s) => s
     property int labelSize: Math.max(16, Math.round(height * 0.021))
     // slides off-edge by 8px while hidden
     readonly property int edgeMargin: Math.round(height * 0.02) + (revealed ? 0 : -8)
@@ -103,11 +104,11 @@ Item {
 
         Repeater {
             model: [
-                { label: i18n("Lock"),      act: "lock",     on: session.canLock },
-                { label: i18n("Log out"),   act: "logout",   on: session.canLogout },
-                { label: i18n("Sleep"),     act: "suspend",  on: session.canSuspend },
-                { label: i18n("Restart"),   act: "reboot",   on: session.canReboot },
-                { label: i18n("Shut down"), act: "shutdown", on: session.canShutdown }
+                { label: root.translate("Lock"),      act: "lock",     on: session.canLock },
+                { label: root.translate("Log out"),   act: "logout",   on: session.canLogout },
+                { label: root.translate("Sleep"),     act: "suspend",  on: session.canSuspend },
+                { label: root.translate("Restart"),   act: "reboot",   on: session.canReboot },
+                { label: root.translate("Shut down"), act: "shutdown", on: session.canShutdown }
             ]
             delegate: Text {
                 id: btn
@@ -141,6 +142,7 @@ Item {
     // quick settings
     XmbQuickSettings {
         id: quick
+        translate: root.translate
         anchors.horizontalCenter: parent.horizontalCenter
         y: root.atBottom ? root.height - height - root.edgeMargin : root.edgeMargin
         Behavior on y { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }

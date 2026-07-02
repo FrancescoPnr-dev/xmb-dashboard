@@ -77,6 +77,7 @@ PlasmoidItem {
         clockShowDate: Plasmoid.configuration.clockShowDate
 
         topBarPosition: Plasmoid.configuration.topBarPosition
+        uiLanguage: Plasmoid.configuration.language
     }
 
     // Keyboard / global-shortcut activation.
