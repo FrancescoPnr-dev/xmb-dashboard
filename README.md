@@ -1,14 +1,15 @@
 # XMB Dashboard
 
 A fullscreen app launcher for KDE Plasma 6, inspired by the PlayStation 3 / PSP
-**XrossMediaBar**. A panel icon opens a semi-transparent overlay with a horizontal
-bar of app categories and the selected category's apps fanning out vertically —
-navigable by keyboard, mouse wheel and mouse edges, with the classic wave
+**XrossMediaBar**. 
+Navigable by keyboard, controller, mouse wheel and mouse edges, with the classic wave
 background, type-to-search and subtle sounds.
 
 > Built and tested on Plasma 6.7 / Qt 6.
 
-<!-- TODO: screenshot / gif -->
+<img width="640" height="360" alt="output_compresso" src="https://github.com/user-attachments/assets/50e8aa85-5891-46c0-b3a4-89c56a1cb6be" />
+
+
 
 ## Features
 
@@ -21,6 +22,9 @@ background, type-to-search and subtle sounds.
   configurable, off by default where relevant).
 - Lots of tunables in the settings: icon sizes, cross position, scroll feel,
   wave look, sounds, and which categories to show.
+
+  <img width="3723" height="1433" alt="2" src="https://github.com/user-attachments/assets/7c113a95-f20d-4587-b197-651b6ee3ae72" />
+
 
 ## Install
 
@@ -55,6 +59,9 @@ For quick iteration during development, `plasmoidviewer --applet .` (from
 Right-click the widget → *Configure*. Sections for appearance, behaviour, the
 mouse category bar, the wave background and colour, particles, sounds, and visible
 categories. Each section has its own "reset to defaults".
+
+<img width="3554" height="2069" alt="4" src="https://github.com/user-attachments/assets/c402e973-104d-451d-b1d1-cb7f422db742" />
+
 
 ## Credits & licence
 
