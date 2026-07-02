@@ -146,8 +146,10 @@ SPDX-License-Identifier: GPL-3.0-only
         <entry name="navSoundFile" type="String"><default></default></entry>
         <entry name="navSoundVolume" type="Double"><default>0.5</default></entry>
 
-        <!-- Looping ambient pad under the dashboard, fading in/out. Original, not Sony. -->
-        <entry name="ambientSoundEnabled" type="Bool"><default>true</default></entry>
+        <!-- Looping ambient pad under the dashboard, fading in/out. Original, not Sony.
+             ambientSoundMode: 0 = bundled loop, 1 = custom file (ambientSoundFile), 2 = off. -->
+        <entry name="ambientSoundMode" type="Int"><default>0</default></entry>
+        <entry name="ambientSoundFile" type="String"><default></default></entry>
         <entry name="ambientSoundVolume" type="Double"><default>0.5</default></entry>
     </group>
 </kcfg>

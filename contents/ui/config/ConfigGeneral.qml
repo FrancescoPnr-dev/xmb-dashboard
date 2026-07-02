@@ -57,8 +57,9 @@ KCM.SimpleKCM {
     property alias cfg_navSoundMode: navSoundCombo.currentIndex
     property alias cfg_navSoundFile: navSoundFileField.text
     property alias cfg_navSoundVolume: navSoundVolumeSlider.value
-    property alias cfg_ambientSoundEnabled: ambientEnabledCheck.checked
-    property alias cfg_ambientSoundVolume: ambientVolumeSlider.value
+    property alias cfg_ambientSoundMode: ambientSoundCombo.currentIndex
+    property alias cfg_ambientSoundFile: ambientSoundFileField.text
+    property alias cfg_ambientSoundVolume: ambientSoundVolumeSlider.value
 
     // Must be an alias, not `property var`, or the config system stops generating
     // cfg_<key>Default for every key. Hence the helper store below.
@@ -125,7 +126,8 @@ KCM.SimpleKCM {
     property int    cfg_navSoundModeDefault: 0
     property string cfg_navSoundFileDefault: ""
     property real   cfg_navSoundVolumeDefault: 0.5
-    property bool   cfg_ambientSoundEnabledDefault: true
+    property int    cfg_ambientSoundModeDefault: 0
+    property string cfg_ambientSoundFileDefault: ""
     property real   cfg_ambientSoundVolumeDefault: 0.5
 
     function resetAppearance() {
@@ -179,7 +181,8 @@ KCM.SimpleKCM {
         cfg_navSoundMode = cfg_navSoundModeDefault
         cfg_navSoundFile = cfg_navSoundFileDefault
         cfg_navSoundVolume = cfg_navSoundVolumeDefault
-        cfg_ambientSoundEnabled = cfg_ambientSoundEnabledDefault
+        cfg_ambientSoundMode = cfg_ambientSoundModeDefault
+        cfg_ambientSoundFile = cfg_ambientSoundFileDefault
         cfg_ambientSoundVolume = cfg_ambientSoundVolumeDefault
     }
 
@@ -580,15 +583,35 @@ KCM.SimpleKCM {
             QQC2.Label { text: Math.round(navSoundVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
-        QQC2.CheckBox {
-            id: ambientEnabledCheck
+        Item { implicitHeight: Kirigami.Units.largeSpacing }
+
+        QQC2.ComboBox {
+            id: ambientSoundCombo
             Kirigami.FormData.label: i18n("Background ambience:")
+            // index maps to ambientSoundMode (0/1/2)
+            model: [ i18n("XMB (default)"), i18n("Custom file…"), i18n("Off") ]
         }
+
+        QQC2.TextField {
+            id: ambientSoundFileField
+            Kirigami.FormData.label: i18n("Custom ambience file:")
+            Layout.preferredWidth: page.controlWidth
+            enabled: ambientSoundCombo.currentIndex === 1
+            placeholderText: i18n("/path/to/loop.wav or .mp3")
+        }
+        QQC2.Label {
+            Layout.preferredWidth: page.controlWidth
+            visible: ambientSoundCombo.currentIndex === 1
+            wrapMode: Text.WordWrap
+            opacity: 0.7
+            text: i18n("The file loops while the dashboard is open. WAV loops gaplessly; mp3/ogg may have a small seam at the loop point.")
+        }
+
         RowLayout {
-            Kirigami.FormData.label: i18n("Ambience volume:")
-            enabled: ambientEnabledCheck.checked
-            QQC2.Slider { id: ambientVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
-            QQC2.Label { text: Math.round(ambientVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
+            Kirigami.FormData.label: i18n("Volume:")
+            enabled: ambientSoundCombo.currentIndex !== 2
+            QQC2.Slider { id: ambientSoundVolumeSlider; from: 0.0; to: 1.0; stepSize: 0.01; Layout.preferredWidth: page.controlWidth }
+            QQC2.Label { text: Math.round(ambientSoundVolumeSlider.value * 100) + "%"; Layout.minimumWidth: valueColumnWidth; horizontalAlignment: Text.AlignRight }
         }
 
         QQC2.Button {
