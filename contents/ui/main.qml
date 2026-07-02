@@ -13,7 +13,7 @@ PlasmoidItem {
     preferredRepresentation: fullRepresentation
     fullRepresentation: buttonComponent
 
-    Plasmoid.icon: Plasmoid.configuration.panelIcon
+    Plasmoid.icon: Plasmoid.configuration.panelIcon || "applications-all"
 
     Component.onCompleted: {
         // Without this Plasma eats the click to toggle a popup and our handlers never fire.
@@ -97,7 +97,7 @@ PlasmoidItem {
                 id: buttonIcon
                 anchors.fill: parent
                 // Bundled monochrome XMB icon by default; a custom panelIcon overrides it.
-                source: Plasmoid.configuration.panelIcon === "applications-all"
+                source: Plasmoid.configuration.panelIcon === "" || Plasmoid.configuration.panelIcon === "applications-all"
                     ? Qt.resolvedUrl("../icons/xmb-dashboard.svg") : Plasmoid.icon
                 active: mouseArea.containsMouse
             }

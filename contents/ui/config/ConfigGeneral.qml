@@ -78,7 +78,7 @@ KCM.SimpleKCM {
     property int  cfg_categoryIconSizeDefault: 112
     property int  cfg_appIconSizeDefault: 56
     property real cfg_intersectionXFractionDefault: 0.30
-    property string cfg_panelIconDefault: "applications-all"
+    property string cfg_panelIconDefault: ""
 
     property real cfg_hotZoneFractionLeftDefault: 0.15
     property real cfg_hotZoneFractionRightDefault: 0.15
@@ -218,6 +218,7 @@ KCM.SimpleKCM {
         QQC2.TextField {
             id: iconField
             Kirigami.FormData.label: i18n("Panel icon name:")
+            placeholderText: i18n("XMB logo (default)")
             Layout.preferredWidth: page.controlWidth
         }
 
@@ -511,7 +512,6 @@ KCM.SimpleKCM {
         QQC2.CheckBox {
             id: ambientEnabledCheck
             Kirigami.FormData.label: i18n("Background ambience:")
-            text: i18n("Play a soft looping pad while the dashboard is open")
         }
         RowLayout {
             Kirigami.FormData.label: i18n("Ambience volume:")

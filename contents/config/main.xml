@@ -32,9 +32,9 @@ SPDX-License-Identifier: GPL-3.0-only
             <default>0.30</default>
         </entry>
 
-        <!-- Icon shown on the panel for this widget. -->
+        <!-- Themed icon name for the panel button; empty = bundled XMB logo. -->
         <entry name="panelIcon" type="String">
-            <default>applications-all</default>
+            <default></default>
         </entry>
 
         <!-- Display names of categories the user chose to hide from the bar. -->
