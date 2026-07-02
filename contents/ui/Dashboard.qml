@@ -517,23 +517,13 @@ Window {
         navSound.play()
     }
 
-    // Switching category resets the app column; swallow that so it doesn't fire a spurious tick.
-    Timer { id: catSwitchGuard; interval: 250 }
-    Connections {
-        target: dashboard
-        function onCommittedIndexChanged() { catSwitchGuard.restart() }
-    }
     Connections {
         target: categoryBar
         function onCurrentIndexChanged() { dashboard.playNavTick() }
     }
-    // App cursor moved — but not the auto-reset when the category changes.
+    // Explicit up/down only, so category-switch model resets stay silent.
     Connections {
         target: appColumn
-        function onCurrentIndexChanged() {
-            if (catSwitchGuard.running)
-                return
-            dashboard.playNavTick()
-        }
+        function onNavigated() { dashboard.playNavTick() }
     }
 }
