@@ -7,6 +7,8 @@ background, type-to-search and subtle sounds.
 
 > Built and tested on Plasma 6.7 / Qt 6.
 
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-☕-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/francescopnr)
+
 <img width="640" height="360" alt="output_compresso" src="https://github.com/user-attachments/assets/50e8aa85-5891-46c0-b3a4-89c56a1cb6be" />
 
 
