@@ -70,6 +70,11 @@ PlasmoidItem {
         // Background ambience
         ambientSoundEnabled: Plasmoid.configuration.ambientSoundEnabled
         ambientSoundVolume: Plasmoid.configuration.ambientSoundVolume
+
+        // Clock
+        clockTimeFormat: Plasmoid.configuration.clockTimeFormat
+        clockDateFormat: Plasmoid.configuration.clockDateFormat
+        clockShowDate: Plasmoid.configuration.clockShowDate
     }
 
     // Keyboard / global-shortcut activation.

@@ -8,15 +8,21 @@ Text {
 
     property var now: new Date()
     property int pixelSize: 30
+    property int timeFormat: 0   // 0 system, 1 12h, 2 24h
+    property int dateFormat: 0   // 0 system, 1 dd/mm, 2 mm/dd
+    property bool showDate: true
 
-    function two(n) { return n < 10 ? "0" + n : "" + n }
     text: {
         var d = clock.now
-        var h = d.getHours()
-        var ap = h < 12 ? "AM" : "PM"
-        var h12 = h % 12
-        if (h12 === 0) h12 = 12
-        return (d.getMonth() + 1) + "/" + d.getDate() + "   " + h12 + ":" + two(d.getMinutes()) + " " + ap
+        var t = timeFormat === 1 ? Qt.formatTime(d, "h:mm AP")
+              : timeFormat === 2 ? Qt.formatTime(d, "HH:mm")
+              : Qt.formatTime(d, Qt.locale().timeFormat(Locale.ShortFormat))
+        if (!clock.showDate) return t
+        // system = locale short date with the year stripped out
+        var df = dateFormat === 1 ? "dd/MM"
+               : dateFormat === 2 ? "MM/dd"
+               : Qt.locale().dateFormat(Locale.ShortFormat).replace(/[^dM]*y+[^dM]*/, "")
+        return Qt.formatDate(d, df) + "   " + t
     }
 
     color: "#ffffff"

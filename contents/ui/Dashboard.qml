@@ -65,6 +65,10 @@ Window {
     // Looping background ambience, faded in/out on open/close.
     property bool ambientSoundEnabled: true
     property real ambientSoundVolume: 0.5
+
+    property int clockTimeFormat: 0
+    property int clockDateFormat: 0
+    property bool clockShowDate: true
     property real ambientLevel: 0.0
     Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
 
@@ -464,6 +468,9 @@ Window {
         anchors.topMargin: Math.round(dashboard.height * 0.06)
         anchors.rightMargin: Math.round(dashboard.width * 0.025)
         pixelSize: Math.max(20, Math.round(dashboard.height * 0.026))
+        timeFormat: dashboard.clockTimeFormat
+        dateFormat: dashboard.clockDateFormat
+        showDate: dashboard.clockShowDate
     }
 
     // Top-edge reveal system bar, independent of Plasma's screen edges.
