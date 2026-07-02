@@ -64,8 +64,17 @@ Window {
         : Qt.resolvedUrl("../sounds/nav-tick.wav")
 
     // Looping background ambience, faded in/out on open/close.
-    property bool ambientSoundEnabled: true
+    // ambientSoundMode: 0 = bundled loop, 1 = custom file, 2 = off.
+    property int ambientSoundMode: 0
+    property string ambientSoundFile: ""
     property real ambientSoundVolume: 0.5
+    readonly property url ambientSoundSource:
+        ambientSoundMode === 2 ? Qt.url("")
+        : ambientSoundMode === 1
+            ? (ambientSoundFile.length === 0 ? Qt.url("")
+               : (ambientSoundFile.indexOf("://") !== -1 ? Qt.url(ambientSoundFile)
+                  : Qt.url("file://" + ambientSoundFile)))
+        : Qt.resolvedUrl("../sounds/ambient-loop.wav")
 
     property int clockTimeFormat: 0
     property int clockDateFormat: 0
@@ -146,7 +155,7 @@ Window {
     onVisibleChanged: {
         console.log("XMB: Dashboard visibleChanged -> " + visible)
         if (visible) {
-            if (ambientSoundEnabled) {
+            if (ambientSoundSource.toString() !== "") {
                 ambientStopTimer.stop()
                 ambientLoop.play()
                 ambientLevel = 1.0
@@ -157,11 +166,12 @@ Window {
         }
     }
 
-    // onVisibleChanged only fires on open/close, so handle toggling while already open here.
-    onAmbientSoundEnabledChanged: {
+    // onVisibleChanged only fires on open/close; this covers mode/file changes while
+    // open (mode 2 and mode 1 with no file both resolve to an empty source).
+    onAmbientSoundSourceChanged: {
         if (!visible)
             return
-        if (ambientSoundEnabled) {
+        if (ambientSoundSource.toString() !== "") {
             ambientStopTimer.stop()
             ambientLoop.play()
             ambientLevel = 1.0
@@ -512,12 +522,12 @@ Window {
         volume: dashboard.navSoundVolume
     }
 
-    // Gapless background loop; volume tracks the animated fade level.
-    SoundEffect {
+    // Background loop (gapless for WAV); volume tracks the animated fade level.
+    XmbSound {
         id: ambientLoop
-        source: Qt.resolvedUrl("../sounds/ambient-loop.wav")
-        loops: SoundEffect.Infinite
-        volume: (dashboard.ambientSoundEnabled ? 1 : 0) * dashboard.ambientLevel * dashboard.ambientSoundVolume
+        source: dashboard.ambientSoundSource
+        looping: true
+        volume: dashboard.ambientLevel * dashboard.ambientSoundVolume
     }
     Timer {
         id: ambientStopTimer

@@ -22,7 +22,8 @@ background, type-to-search and subtle sounds.
 - Mouse: wheel scrolls apps, screen edges scroll categories, middle-click launches
   the highlighted app.
 - Navigation "tick" sound and an optional ambient background loop (both original,
-  configurable, off by default where relevant).
+  configurable, off by default where relevant); both can be replaced with your
+  own sound files from the settings.
 - Lots of tunables in the settings: icon sizes, cross position, scroll feel,
   wave look, sounds, and which categories to show.
 

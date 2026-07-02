@@ -68,7 +68,8 @@ PlasmoidItem {
         navSoundVolume: Plasmoid.configuration.navSoundVolume
 
         // Background ambience
-        ambientSoundEnabled: Plasmoid.configuration.ambientSoundEnabled
+        ambientSoundMode: Plasmoid.configuration.ambientSoundMode
+        ambientSoundFile: Plasmoid.configuration.ambientSoundFile
         ambientSoundVolume: Plasmoid.configuration.ambientSoundVolume
 
         // Clock
