@@ -48,6 +48,11 @@ SPDX-License-Identifier: GPL-3.0-only
             <default>true</default>
         </entry>
 
+        <!-- Reveal bar edge: 0 = top, 1 = bottom. -->
+        <entry name="topBarPosition" type="Int">
+            <default>0</default>
+        </entry>
+
         <!-- Display names of categories the user chose to hide from the bar. -->
         <entry name="hiddenCategories" type="StringList">
             <default></default>
