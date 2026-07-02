@@ -39,6 +39,10 @@ Then add it from *Add Widgets…* and click its panel icon to open the dashboard
 For quick iteration during development, `plasmoidviewer --applet .` (from
 `plasma-sdk`) loads straight from source.
 
+> **Note:** the `tools/` and `po/` folders are development sources only (sound
+> generators, translation files, packaging). They are not part of the installed
+> widget and nothing from them ever runs on your machine.
+
 ## Usage
 
 - **Arrows / wheel / screen edges** — move between apps and categories.
