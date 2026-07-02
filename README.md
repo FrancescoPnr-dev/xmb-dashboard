@@ -29,6 +29,13 @@ background, type-to-search and subtle sounds.
   <img width="3723" height="1433" alt="2" src="https://github.com/user-attachments/assets/7c113a95-f20d-4587-b197-651b6ee3ae72" />
 
 
+## Requirements
+
+- KDE Plasma 6 (6.7+ for native controller support), any distribution.
+- Qt6 Multimedia QML module, used for the sounds. Most distros ship it with
+  Plasma; if not: `qt6-multimedia` (Arch/Solus), `qml6-module-qtmultimedia`
+  (Debian/Ubuntu), `qt6-qtmultimedia` (Fedora/openSUSE).
+
 ## Install
 
 > **Recommended:** install the [YAMIS](https://store.kde.org/p/2303161) monochrome
