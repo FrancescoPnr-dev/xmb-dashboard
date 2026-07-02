@@ -7,6 +7,7 @@ import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 import org.kde.plasma.private.kicker as Kicker
+import "../i18n-catalogs.js" as Catalogs
 
 KCM.SimpleKCM {
     id: page
@@ -25,6 +26,7 @@ KCM.SimpleKCM {
     property alias cfg_hotZoneBandHeight: bandHeightSpin.value
     property alias cfg_manageScreenEdges: manageScreenEdgesCheck.checked
     property alias cfg_topBarPosition: barRevealCombo.currentIndex
+    property string cfg_language
     property alias cfg_clockTimeFormat: clockFormatCombo.currentIndex
     property alias cfg_clockDateFormat: clockDateFormatCombo.currentIndex
     property alias cfg_clockShowDate: clockDateCheck.checked
@@ -87,6 +89,7 @@ KCM.SimpleKCM {
     property int  cfg_clockDateFormatDefault: 0
     property bool cfg_clockShowDateDefault: true
     property int  cfg_topBarPositionDefault: 0
+    property string cfg_languageDefault: ""
 
     property real cfg_hotZoneFractionLeftDefault: 0.15
     property real cfg_hotZoneFractionRightDefault: 0.15
@@ -239,6 +242,24 @@ KCM.SimpleKCM {
             text: i18n("Reset section to defaults")
             icon.name: "edit-undo"
             onClicked: page.resetAppearance()
+        }
+
+        Kirigami.Separator {
+            Kirigami.FormData.label: i18n("Language")
+            Kirigami.FormData.isSection: true
+        }
+
+        QQC2.ComboBox {
+            id: languageCombo
+            Kirigami.FormData.label: i18n("Language:")
+            Layout.preferredWidth: page.controlWidth
+            readonly property var codes: [""].concat(Catalogs.languages)
+            model: codes.map(c => c === "" ? i18n("System")
+                : c === "en" ? "English"
+                : (Qt.locale(c).nativeLanguageName.charAt(0).toUpperCase()
+                   + Qt.locale(c).nativeLanguageName.slice(1)) || c)
+            currentIndex: Math.max(0, codes.indexOf(page.cfg_language))
+            onActivated: page.cfg_language = codes[currentIndex]
         }
 
         Kirigami.Separator {

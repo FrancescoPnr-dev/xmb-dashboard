@@ -7,6 +7,7 @@ import QtQuick.Effects
 import QtMultimedia
 import org.kde.plasma.private.kicker as Kicker
 import org.kde.kitemmodels as KItemModels
+import "i18n-catalogs.js" as Catalogs
 
 Window {
     id: dashboard
@@ -71,6 +72,18 @@ Window {
     property bool clockShowDate: true
 
     property int topBarPosition: 0
+
+    // "" = system language; otherwise a code from the bundled catalogs.
+    property string uiLanguage: ""
+    onUiLanguageChanged: rebuildCategories()
+    function tr(msg) {
+        if (uiLanguage === "")
+            return i18n(msg)
+        if (uiLanguage === "en")
+            return msg
+        var c = Catalogs.catalogs[uiLanguage]
+        return (c && c[msg]) || msg
+    }
     property real ambientLevel: 0.0
     Behavior on ambientLevel { NumberAnimation { duration: 1400; easing.type: Easing.InOutSine } }
 
@@ -275,7 +288,7 @@ Window {
         }
         // "Favourites" is always the first category; hideable like the rest via its key.
         if (hiddenCategories.indexOf("__favorites__") === -1)
-            arr.unshift({ name: i18n("Favorites"), icon: "bookmarks",
+            arr.unshift({ name: tr("Favorites"), icon: "bookmarks",
                           key: "__favorites__", sourceRow: -1, favorites: true })
         categories = arr
         // CategoryBar self-clamps its position; we only clamp the committed index.
@@ -481,6 +494,7 @@ Window {
         anchors.fill: parent
         z: 90
         atBottom: dashboard.topBarPosition === 1
+        translate: dashboard.tr
         onActionTriggered: dashboard.close()
     }
 

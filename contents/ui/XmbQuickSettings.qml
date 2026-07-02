@@ -10,6 +10,7 @@ Item {
 
     property int labelSize: 18
     property bool active: false
+    property var translate: (s) => s
     readonly property bool hovered: bandHover.hovered
     signal closeRequested()
 
@@ -87,7 +88,7 @@ Item {
             spacing: 1
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: i18n("Brightness"); color: "white"
+                text: qs.translate("Brightness"); color: "white"
                 opacity: briHover.hovered ? 1.0 : 0.74
                 font.pixelSize: qs.labelSize; font.weight: Font.Light; font.letterSpacing: 1
             }
@@ -106,7 +107,7 @@ Item {
             spacing: 1
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: i18n("Volume"); color: "white"
+                text: qs.translate("Volume"); color: "white"
                 opacity: volHover.hovered ? 1.0 : 0.74
                 font.pixelSize: qs.labelSize; font.weight: Font.Light; font.letterSpacing: 1
             }
@@ -125,13 +126,13 @@ Item {
             spacing: 1
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: i18n("Network"); color: "white"
+                text: qs.translate("Network"); color: "white"
                 opacity: netHover.hovered ? 1.0 : 0.74
                 font.pixelSize: qs.labelSize; font.weight: Font.Light; font.letterSpacing: 1
             }
             Text {
                 Layout.alignment: Qt.AlignHCenter
-                text: i18n("Settings")
+                text: qs.translate("Settings")
                 color: "white"; opacity: netHover.hovered ? 0.9 : 0.0
                 Behavior on opacity { NumberAnimation { duration: 120 } }
                 font.pixelSize: Math.round(qs.labelSize * 0.8); font.weight: Font.Light
