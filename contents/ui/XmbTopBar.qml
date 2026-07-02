@@ -45,14 +45,9 @@ Item {
     // chevron, on the left
     Item {
         id: chevronBox
-        anchors.top: root.atBottom ? undefined : parent.top
-        anchors.bottom: root.atBottom ? parent.bottom : undefined
-        anchors.left: parent.left
-        anchors.topMargin: root.edgeMargin
-        anchors.bottomMargin: root.edgeMargin
-        anchors.leftMargin: Math.round(root.width * 0.03)
-        Behavior on anchors.topMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
-        Behavior on anchors.bottomMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+        x: Math.round(root.width * 0.03)
+        y: root.atBottom ? root.height - height - root.edgeMargin : root.edgeMargin
+        Behavior on y { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
         width: Math.round(root.labelSize * 2.2)
         height: width
 
@@ -89,12 +84,9 @@ Item {
     // power actions
     ColumnLayout {
         id: powerCol
-        anchors.top: root.atBottom ? undefined : chevronBox.bottom
-        anchors.bottom: root.atBottom ? chevronBox.top : undefined
-        anchors.left: chevronBox.left
-        anchors.topMargin: Math.round(root.labelSize * 0.4)
-        anchors.bottomMargin: Math.round(root.labelSize * 0.4)
-        anchors.leftMargin: Math.round(root.labelSize * 0.3)
+        x: chevronBox.x + Math.round(root.labelSize * 0.3)
+        y: root.atBottom ? chevronBox.y - implicitHeight - Math.round(root.labelSize * 0.4)
+                         : chevronBox.y + chevronBox.height + Math.round(root.labelSize * 0.4)
         spacing: Math.round(root.labelSize * 0.9)
 
         visible: root.powerExpanded || powerCol.opacity > 0.01
@@ -150,12 +142,8 @@ Item {
     XmbQuickSettings {
         id: quick
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: root.atBottom ? undefined : parent.top
-        anchors.bottom: root.atBottom ? parent.bottom : undefined
-        anchors.topMargin: root.edgeMargin
-        anchors.bottomMargin: root.edgeMargin
-        Behavior on anchors.topMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
-        Behavior on anchors.bottomMargin { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+        y: root.atBottom ? root.height - height - root.edgeMargin : root.edgeMargin
+        Behavior on y { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
         labelSize: root.labelSize
         active: root.revealed
         visible: root.revealed || opacity > 0.01
@@ -167,8 +155,7 @@ Item {
 
     // trigger strip pinned to the reveal edge
     Item {
-        anchors.top: root.atBottom ? undefined : parent.top
-        anchors.bottom: root.atBottom ? parent.bottom : undefined
+        y: root.atBottom ? parent.height - height : 0
         anchors.left: parent.left
         anchors.right: parent.right
         height: 8
