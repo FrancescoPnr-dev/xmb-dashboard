@@ -6,6 +6,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
+import org.kde.iconthemes as KIconThemes
 import org.kde.plasma.private.kicker as Kicker
 import "../i18n-catalogs.js" as Catalogs
 
@@ -16,7 +17,7 @@ KCM.SimpleKCM {
     property alias cfg_categoryIconSize: categorySizeSpin.value
     property alias cfg_appIconSize: appSizeSpin.value
     property alias cfg_intersectionXFraction: intersectionSlider.value
-    property alias cfg_panelIcon: iconField.text
+    property string cfg_panelIcon
     property alias cfg_hotZoneFractionLeft: hotZoneLeftSlider.value
     property alias cfg_hotZoneFractionRight: hotZoneRightSlider.value
     property alias cfg_minScrollSpeed: minSpeedSpin.value
@@ -234,11 +235,45 @@ KCM.SimpleKCM {
             }
         }
 
-        QQC2.TextField {
-            id: iconField
-            Kirigami.FormData.label: i18n("Panel icon name:")
-            placeholderText: i18n("XMB logo (default)")
-            Layout.preferredWidth: page.controlWidth
+        QQC2.Button {
+            id: iconButton
+            Kirigami.FormData.label: i18n("Panel icon:")
+            implicitWidth: Kirigami.Units.iconSizes.large + Kirigami.Units.smallSpacing * 2
+            implicitHeight: implicitWidth
+            QQC2.ToolTip.text: page.cfg_panelIcon === "" ? i18n("XMB logo (default)") : page.cfg_panelIcon
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+            onClicked: iconMenu.opened ? iconMenu.close() : iconMenu.open()
+
+            KIconThemes.IconDialog {
+                id: iconDialog
+                onIconNameChanged: page.cfg_panelIcon = iconName
+            }
+
+            Kirigami.Icon {
+                anchors.centerIn: parent
+                width: Kirigami.Units.iconSizes.large
+                height: width
+                // Mirrors the fallback in main.qml: empty means the bundled XMB logo.
+                source: page.cfg_panelIcon === "" || page.cfg_panelIcon === "applications-all"
+                    ? Qt.resolvedUrl("../../icons/xmb-dashboard.svg") : page.cfg_panelIcon
+            }
+
+            QQC2.Menu {
+                id: iconMenu
+                y: iconButton.height
+                QQC2.MenuItem {
+                    text: i18n("Choose…")
+                    icon.name: "document-open-folder"
+                    onClicked: iconDialog.open()
+                }
+                QQC2.MenuItem {
+                    text: i18n("Reset to XMB logo")
+                    icon.name: "edit-clear"
+                    enabled: page.cfg_panelIcon !== ""
+                    onClicked: page.cfg_panelIcon = ""
+                }
+            }
         }
 
         QQC2.Button {
